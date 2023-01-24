@@ -8,5 +8,8 @@
 </head>
 <body>
     <p>動作確認です</p>
+    {% for channel in channels %}
+    <p>{{ channel.name }}</p>
+    {% endfor %}
 </body>
 </html>

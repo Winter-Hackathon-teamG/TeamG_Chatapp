@@ -11,14 +11,14 @@ def index():
     #uidが空＝セッション情報の中にuid情報が登録されていない＝まだログインしていない場合
     if uid is None:
         #ログイン画面へリダイレクト。
-       return redirect('/login')
+        return redirect('/login')
 
     #uidが空でない＝セッション情報の中にuid情報が登録されている＝ログイン済みの場合
-    else:
+    else:   
         #データベースからチャンネル情報を取得して変数channelsへ代入
         channels = dbConnect.getChannelAll()
     #ホーム画面のWEBページを返す。HTMLファイルで使う変数は引数で渡す。
-    return render_template('index.html', channels=channels)
+    return render_template('index.html', channels=channels, uid=uid)
 
 if __name__ == '__main__':
     app.run(debug=True)

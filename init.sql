@@ -35,8 +35,10 @@ CREATE TABLE channels (
     abstract varchar(255)
 );
 
+#動作確認用データの挿入
+#テスト1とテスト2のuidとpasswordは最後の1文字だけ変えています。
 INSERT INTO users(uid, user_name, email, password)VALUES('970af84c-dd40-47ff-af23-282b72b7cca8','テスト1','test1@gmail.com','37268335dd6931045bdcdf92623ff819a64244b53d0e746d438797349d4da578');
 INSERT INTO channels(id, uid, name, abstract)VALUES(1, '970af84c-dd40-47ff-af23-282b72b7cca8','ぼっち部屋','テストさんの孤独な部屋です');
 
-INSERT INTO users(uid, user_name, email, password)VALUES('fdajsdfj','テスト2','test2@gmail.com','37268335dd6931045bdcdf92623ff819a64244b53d0e746d438797349d4da579');
-INSERT INTO channels(id, uid, name, abstract)VALUES(2, 'fdajsdfj','リア充部屋','テスト2さんのパーティ部屋です');
+INSERT INTO users(uid, user_name, email, password)VALUES('970af84c-dd40-47ff-af23-282b72b7cca9','テスト2','test2@gmail.com','37268335dd6931045bdcdf92623ff819a64244b53d0e746d438797349d4da579');
+INSERT INTO channels(id, uid, name, abstract)VALUES(2, '970af84c-dd40-47ff-af23-282b72b7cca9','リア充部屋','テスト2さんのパーティルームです');
