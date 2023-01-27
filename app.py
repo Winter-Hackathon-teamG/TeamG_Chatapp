@@ -6,7 +6,7 @@ app = Flask(__name__)
 #ホーム画面（チャンネル一覧画面）の作成
 @app.route('/')
 def index():
-    #セッション情報からuidキーに対応する値を取り出して変数uidに代入
+    # セッション情報からuidキーに対応する値を取り出して変数uidに代入
     uid = session.get('uid')
     #uidが空＝セッション情報の中にuid情報が登録されていない＝まだログインしていない場合
     if uid is None:
@@ -18,7 +18,7 @@ def index():
         #データベースからチャンネル情報を取得して変数channelsへ代入
         channels = dbConnect.getChannelAll()
     #ホーム画面のWEBページを返す。HTMLファイルで使う変数は引数で渡す。
-    return render_template('index.html', channels=channels) # 一時的にuid=uidを消してる
+    return render_template('index.html', uid=uid, channels=channels)
 
 @app.route('/', methods=['POST'])
 def add_channel():
