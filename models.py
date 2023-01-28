@@ -31,7 +31,7 @@ class dbConnect:
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
         * カーソルとは - 検索結果からデータを１件ずつ取得する仕組みまたその目印のこと
-        channelsテーブルから該当のテーブル名を取得する処理するりそのもの→sqlへ代入
+        channelsテーブルから該当のテーブル名を取得する処理そのもの→sqlへ代入
         channelsテーブルから引数で渡ってきたchannel_nameという値を検索し、抜き取る
         * executeとは - SQL文を渡すと実行してくれる関数
         fetchoneでchannel名が一致する1行のみデータを取得→channelに代入
@@ -61,7 +61,7 @@ class dbConnect:
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
         sqlにSQL文を代入
-        execute分でsqlを実行(channelテーブルにユーザーID,チャンネル名,チャンネル概要を追加)
+        execute文でsqlを実行(channelテーブルにユーザーID,チャンネル名,チャンネル概要を追加)
         commitで変更を確定
         * commitとは - トランザクションの結果を確定する(変更を確定する)
         """
@@ -83,3 +83,49 @@ class dbConnect:
         # 最終処理:カーソルを閉じる
         finally:
             cur.close()
+
+    # 引数で渡したチャンネルIDに該当するチャンネルを取得
+    def getChannelByID(cid):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        channelsテーブルから該当のcidのチャンネルを取得するSQL文→sqlへ代入
+        channelsテーブルから引数で渡ってきたcidの値を検索し、抜き取る
+        fetchoneでcidが一致する1行のみデータを取得→channelに代入
+        channelを返す
+        """
+
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = "SELECT * FROM channels WHERE id=%s;"
+            cur.execute(sql, (cid))
+            channel = cur.fetchone()
+            return channel
+
+        # 例外処理
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+
+        # 最終処理:カーソルを閉じる
+        finally:
+            cur.close()
+
+    # チャンネル更新(ユーザーID, チャンネル名, チャンネル概要)
+    def updateChannel(uid, newChannelName, newChannelDescription, cid):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        channelsテーブルで該当するcidの（ユーザーID,チャンネル名,チャンネル概要）を更新するSQL文→sqlへ代入
+        execute文にsqlと更新する値の入った各変数を渡して実行
+        commitで変更を確定
+        カーソルを閉じる
+        """
+
+        conn = DB.getConnection()
+        cur = conn.cursor()
+        sql = "UPDATE channels SET uid=%s, name=%s, abstract=%s WHERE id=%s;"
+        cur.execute(sql, (uid, newChannelName, newChannelDescription, cid))
+        conn.commit()
+        cur.close()
