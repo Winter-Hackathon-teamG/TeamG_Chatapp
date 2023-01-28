@@ -13,7 +13,7 @@ class DB:
             password = 'testuser',
             charset = 'utf8',
             cursorclass = pymysql.cursors.DictCursor
-        ) 
+        )
             #コネクションオブジェクトを返す
             return conn
         #例外処理
