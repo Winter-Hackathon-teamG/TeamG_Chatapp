@@ -1,0 +1,9 @@
+/*仮にスタイルを部分的に追加*/
+* {
+  float: none;
+  position: static;
+  font-family: "Sawarabi Mincho", serif;
+  font-family: "DontGothic16",sans-serif;
+  font-size: 20px;
+  box-sizing: border-box;
+}
