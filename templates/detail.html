@@ -14,6 +14,7 @@
     <div class="chat-box">
       <div id="chat-header">
         <!-- もしuidとチャンネル作成者が同じならタイトル、説明を編集可能にする -->
+        <!-- バックエンド側の処理が完了するまで一旦コメントアウト
         <p id="chatroom-name">{{ channel.name }}</p>
         {% if channel.abstract is not none %}
           <p id="chatroom-description">{{ channel.abstract }}</p>
@@ -22,8 +23,10 @@
           <button id='channel-update' class="basic-btn smaller-btn">編集</button>
           {% include 'modal/update-channel.html' %}
         {% endif %}
+        -->
       </div>
       <div id="message-area">
+        <!-- バックエンド側の処理が完了するまで一旦コメントアウト
         {% if messages|length > 0 %}
           {% for message in messages %}
             {% if message.uid == uid %}
@@ -50,6 +53,7 @@
         {% else %}
           <div><p>まだメッセージがありません</p></div>
         {% endif %}
+        -->
       </div>
       <div class="typing-box-wrapper">
         <form class="typing-box" action="/message" method="POST">
