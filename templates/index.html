@@ -1,26 +1,7 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>テスト</title>
-</head>
-<body>
-    <p>動作確認です</p>
-    <!-- チャンネル作成機能確認用フォーム -->
-    <form action="/" method="POST">
-        <label for="channel-title">チャンネル名:</label>
-        <input type="text" name="channel-title" placeholder="チャンネル名"><br>
-        <label for="channel-discription">チャンネル概要:</label>
-        <input type="text" name="chennel-discription" placeholder="チャンネル概要"><br>
-        <input type="submit" value="作成">
-    </form>
-    <!-- チャンネル一覧表示確認用 -->
-    <ul>
-    {% for channel in channels %}
-        <li>{{ channel.name }} : {{ channel.abstract }}</li>
-    {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}
+<title>home</title>
+{% endblock %}
+
+{% block body %}
+{% endblock %}
