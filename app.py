@@ -54,9 +54,6 @@ def add_channel():
         error = '既に同じチャンネルが存在しています'
         return render_template('error/error.html', error_message=error)
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
 # チャンネル編集機能
 @app.route('/update_channel', methods=['POST'])
 def update_channel():
@@ -86,9 +83,39 @@ def update_channel():
     channel_name = request.form.get('channel-title')
     channel_description = request.form.get('channel-description')
 
+    #! 仮uid
+    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
     dbConnect.updateChannel(uid, channel_name, channel_description, cid)
     channel = dbConnect.getChannelById(cid)
     #! メッセージ機能作成までコメントアウト
     # messages = dbConnect.getMessageAll(cid)
-    return render_template('detail.html', messages=messages, channel=channel, uid=uid)
+    return render_template('detail.html', channel=channel, uid=uid) #! messagesを追加
 
+# メッセージ一覧画面（チャンネル編集機能用にチャンネル名とチャンネル概要のみ表示する画面）
+@app.route('/detail/<cid>')
+def detail(cid):
+    """ ユーザーID
+
+    ユーザーIDをセッションから取得してuidに代入
+    ユーザーIDが無ければログインページへリダイレクト
+    """
+    #! ユーザー機能作成までコメントアウト
+    # uid = session.get('uid')
+    # if uid is None:
+    #     return redirect('/login')
+
+    """ メッセージ一覧画面
+
+    URLよりチャンネルIDを取得→cidに代入
+    データベースから該当するcidのチャンネルを取得
+    （！コメントアウト　データベースから全てのメッセージを取得）
+    メッセージ一覧画面を表示
+    """
+    cid = cid
+    channel = dbConnect.getChannelById(cid)
+    #! メッセージ機能作成までコメントアウト
+    # messages = dbConnect.getMessageAll(cid)
+    return render_template('detail.html', channel=channel) #! messages,uidを追加
+
+if __name__ == '__main__':
+    app.run(debug=True)

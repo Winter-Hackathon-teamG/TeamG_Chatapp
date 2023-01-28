@@ -85,7 +85,7 @@ class dbConnect:
             cur.close()
 
     # 引数で渡したチャンネルIDに該当するチャンネルを取得
-    def getChannelByID(cid):
+    def getChannelById(cid):
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
