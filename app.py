@@ -1,24 +1,31 @@
 from flask import Flask, request, redirect, render_template, session, flash
 from models import dbConnect
+import uuid
 
 app = Flask(__name__)
+app.secret_key = uuid.uuid4().hex
+
 
 #ホーム画面（チャンネル一覧画面）の作成
 @app.route('/')
 def index():
-    # セッション情報からuidキーに対応する値を取り出して変数uidに代入
-    uid = session.get('uid')
-    #uidが空＝セッション情報の中にuid情報が登録されていない＝まだログインしていない場合
-    if uid is None:
-        #ログイン画面へリダイレクト。
-        return redirect('/login')
+    """ ユーザーID
+
+    ユーザーIDをセッションから取得してuidに代入
+    ユーザーIDが無ければログインページへリダイレクト
+    """
+    #! ユーザー機能作成までコメントアウト
+    # uid = session.get('uid')
+    # if uid is None:
+    #     return redirect('/login')
+
 
     #uidが空でない＝セッション情報の中にuid情報が登録されている＝ログイン済みの場合
-    else:
+    #else:
         #データベースからチャンネル情報を取得して変数channelsへ代入
-        channels = dbConnect.getChannelAll()
+    channels = dbConnect.getChannelAll()
     #ホーム画面のWEBページを返す。HTMLファイルで使う変数は引数で渡す。
-    return render_template('index.html', uid=uid, channels=channels)
+    return render_template('test.html', channels=channels) #! uidを追加
 
 @app.route('/', methods=['POST'])
 def add_channel():
@@ -116,6 +123,19 @@ def detail(cid):
     #! メッセージ機能作成までコメントアウト
     # messages = dbConnect.getMessageAll(cid)
     return render_template('detail.html', channel=channel) #! messages,uidを追加
+
+@app.route('/delete_channel/<cid>', methods=['POST'])
+def delete_channel(cid):
+    uid = 'dfjioajeajsdkfjldsa'
+    channel = dbConnect.getChannelById(cid)
+    if channel['uid'] != uid:
+        flash('チャンネルは作成者のみ削除可能です')
+        return redirect('/')
+
+    else:
+        dbConnect.deleteChannel(cid)
+        channels = dbConnect.getChannelAll()
+        return render_template('test.html', channels=channels)
 
 if __name__ == '__main__':
     app.run(debug=True)

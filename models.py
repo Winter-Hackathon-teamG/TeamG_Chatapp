@@ -122,10 +122,23 @@ class dbConnect:
         commitで変更を確定
         カーソルを閉じる
         """
-
         conn = DB.getConnection()
         cur = conn.cursor()
         sql = "UPDATE channels SET uid=%s, name=%s, abstract=%s WHERE id=%s;"
         cur.execute(sql, (uid, newChannelName, newChannelDescription, cid))
         conn.commit()
         cur.close()
+
+    def deleteChannel(cid):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = "DELETE FROM channels WHERE id=%s;"
+            cur.execute(sql, (cid))
+            conn.commit()
+            return None
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+        finally:
+            cur.close()
