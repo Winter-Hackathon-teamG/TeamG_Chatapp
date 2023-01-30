@@ -4,31 +4,32 @@
 {% endblock %}
 {% block body %}
   <div class="main-container channelpage">
-    <!-- sampleはアニメーションであるため'id="gif"'は記述しない -->
-    <img src="{{ url_for('static',filename='static/img/football_field_ball.jpg') }}"/>
+    {#  sampleはアニメーションであるため'id="gif"'は記述しない 
+      <img src="{{ url_for('static',filename='img/football_field_ball.jpg') }}"/>
+    #}
     <div class="bg-img"></div>
     <div class="main-content">
       <div class="channel-title">
         <h1>チャネル一覧</h1>
-        <!-- 'add-cahnnel-btn'を受け取る -->
+        {#'add-cahnnel-btn'を受け取る#}
         <button id="add-cahnnel-btn">チャンネル追加</button>
       </div>
       <div class="pagination-container">
-        <!-- paginationの表示 
+        {# paginationの表示 
           <p id="prev"></p>
           <ul class="pagination"></ul>
           <p id="next"></p>
-        -->
+        #}
       </div>
-      <!-- チャンネルの一覧を表示 
+      {# チャンネルの一覧を表示 
         <ul class="cannel-box"></ul>
         {% include 'modal/add-cahnnel.html' %}
         {% include 'modal/delete-confirmation.html' %}
-      -->
+      #}
     </div>
   </div>
 {% endblock %}
-<!-- jsの情報を読み込み 
+{# jsの情報を読み込み 
   {% block script %}
     <script type="text/javascript">
       const channels = JSON.parse('{{ channels|tojson }}')
@@ -43,4 +44,4 @@
     type="text/javascript"
     ></script>
     {% endblock %}
-  -->
+  #}
