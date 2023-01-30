@@ -12,6 +12,7 @@
           <input type="text" placeholder="Email" name="email" />
           <input type="password" placeholder="Password" name="password" />
           <button class="green">LOG IN</button>
+          {#
           {% with messages = get_flashed_messages() %}
             {% if messages %}
               <ul class="flashes">
@@ -21,9 +22,10 @@
               </ul>
             {% endif %}
           {% endwith %}
-          <a class="switch-register-mode" href="{{ url_for('signup') }}">
+          #}
+          {# <a class="switch-register-mode" href="{{ url_for('signup') }}"> #}
             Not registered yet?
-          </a>
+          {# </a> #}
         </form>
       </div>
     </div>
