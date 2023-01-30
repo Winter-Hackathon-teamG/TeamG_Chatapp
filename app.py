@@ -18,14 +18,15 @@ def index():
     # uid = session.get('uid')
     # if uid is None:
     #     return redirect('/login')
+    # else:
 
+    """チャンネル一覧表示
 
-    #uidが空でない＝セッション情報の中にuid情報が登録されている＝ログイン済みの場合
-    #else:
-        #データベースからチャンネル情報を取得して変数channelsへ代入
-    channels = dbConnect.getChannelAll()
-    #ホーム画面のWEBページを返す。HTMLファイルで使う変数は引数で渡す。
-    return render_template('test.html', channels=channels) #! uidを追加
+    データベースから全てのチャンネルを取得→channelsへ代入
+    チャンネル一覧画面を表示
+    """
+    channels = dbConnect.getChannelAll() #! インデント必要
+    return render_template('test_index.html', channels=channels) #! uidを追加
 
 @app.route('/', methods=['POST'])
 def add_channel():
@@ -96,7 +97,7 @@ def update_channel():
     channel = dbConnect.getChannelById(cid)
     #! メッセージ機能作成までコメントアウト
     # messages = dbConnect.getMessageAll(cid)
-    return render_template('detail.html', channel=channel, uid=uid) #! messagesを追加
+    return render_template('test_detail.html', channel=channel, uid=uid) #! messagesを追加
 
 # メッセージ一覧画面（チャンネル編集機能用にチャンネル名とチャンネル概要のみ表示する画面）
 @app.route('/detail/<cid>')
@@ -122,20 +123,48 @@ def detail(cid):
     channel = dbConnect.getChannelById(cid)
     #! メッセージ機能作成までコメントアウト
     # messages = dbConnect.getMessageAll(cid)
-    return render_template('detail.html', channel=channel) #! messages,uidを追加
+    return render_template('test_detail.html', channel=channel) #! messages,uidを追加
 
-@app.route('/delete_channel/<cid>', methods=['POST'])
+# チャンネル削除機能
+@app.route('/delete/<cid>')
 def delete_channel(cid):
-    uid = 'dfjioajeajsdkfjldsa'
-    channel = dbConnect.getChannelById(cid)
-    if channel['uid'] != uid:
-        flash('チャンネルは作成者のみ削除可能です')
-        return redirect('/')
+    """ ユーザーID
 
-    else:
-        dbConnect.deleteChannel(cid)
-        channels = dbConnect.getChannelAll()
-        return render_template('test.html', channels=channels)
+    ユーザーIDをセッションから取得してuidに代入
+    ユーザーIDが無ければログインページへリダイレクト
+    """
+    #! ユーザー機能作成までコメントアウト
+    # uid = session.get('uid')
+    # if uid is None:
+    #     return redirect('/login')
+    # else:
+
+    """ ユーザーIDがチャンネル作成者と一致しているかの確認
+
+        データベースからURLで指定されたcidに該当するチャンネルを取得
+
+        if データベースから取得したチャンネルのユーザーID(=チャンネルの作成者)が
+        現在アクセスしているユーザーIDと異なる場合:
+            「チャンネルは作成者のみ削除可能です」と表示
+            チャンネル一覧画面へリダイレクト
+    """
+    #!    ユーザー機能作成までコメントアウト
+    #     channel = dbConnect.getChannelById(cid)
+    #     if channel['uid'] != uid:
+    #         flash('チャンネルは作成者のみ削除可能です')
+    #         return redirect('/')
+    #     else:
+
+    """ チャンネル削除処理
+        else:(ユーザーIDが同じ場合)
+            データベースから該当するcidのチャンネルを削除
+            データベースから登録されている全てのチャンネルを取得
+            チャンネル一覧画面を表示
+    """
+    #! 下記3行はインデント必要
+    dbConnect.deleteChannel(cid)
+    channels = dbConnect.getChannelAll()
+    return render_template('test_index.html', channels=channels) #! uidを追加
 
 if __name__ == '__main__':
     app.run(debug=True)

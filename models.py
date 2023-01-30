@@ -129,16 +129,28 @@ class dbConnect:
         conn.commit()
         cur.close()
 
+    # チャンネル削除
     def deleteChannel(cid):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        channelsテーブルから該当するcidのチャンネルデータを削除するSQL文→sqlへ代入
+        execute文にsqlと削除するチャンネルのcidを渡して実行
+        commitで変更を確定
+
+        """
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = "DELETE FROM channels WHERE id=%s;"
             cur.execute(sql, (cid))
             conn.commit()
-            return None
+
+        # 例外処理
         except Exception as e:
             print(e + 'が発生しています')
             return None
+
+        # 最終処理：カーソルを閉じる
         finally:
             cur.close()
