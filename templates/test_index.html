@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>チャンネル一覧表示・削除機能テスト</title>
+  </head>
+  <body>
+    <p>チャンネル一覧表示・削除機能の動作確認です</p>
+    <!-- チャンネル削除機能テスト
+    flask for文による繰り返し処理
+      [チャンネル名]：[チャンネル説明文]　※[]は変数
+    　 削除ボタン（データ送信先：'/delete/[チャンネルID]', メソッド：GET,　値：'削除'　)
+    -->
+    <ul>
+      {% for channel in channels %}
+        <li>
+          {{ channel.name }}:{{ channel.abstract }}
+          <form action="/delete/{{ channel.id }}" method="GET">
+          <input type="submit" value="削除">
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チャンネル編集機能テスト</title>
+</head>
+<body>
+    <h1>チャンネル編集機能の動作確認</h1>
+    <!-- チャンネル編集フォーム -->
+    <h2>チャンネル編集フォーム</h2>
+    <form action="/update_channel" method="POST">
+        <label for="channel-title"> 新しいチャンネル名:</label>
+        <input
+          type="text"
+          placeholder="チャンネル名"
+          name="channel-title"
+        />
+        <br>
+        <label for="channel-title">新しいチャンネル概要:</label>
+        <input
+          type="text"
+          placeholder="チャンネルの説明"
+          name="channel-description"
+        />
+        <input type="hidden" name='cid' value='{{ channel.id }}'>
+        <button>変更</button>
+      </form>
+
+    <!-- チャンネル更新結果が反映されているかの確認用 -->
+    <h2>チャンネル更新結果確認用</h2>
+     <p>チャンネル名：{{ channel.name }}</p>
+     <p>チャンネル概要：{{ channel.abstract }}</p>
+
+
+</body>
+</html>
