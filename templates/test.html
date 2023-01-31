@@ -7,16 +7,9 @@
       <title>index</title>
   </head>
   <body>
-    <p>動作確認です</p>
-    {% for channel in channels %}
-      <ul>
-        <li>
-         {{ channel.name }}:{{ channel.abstract }}
-         <form action="/delete_channel/{{ channel.id }}" method="POST">
-         <input type="submit" value="削除">
-         </form>
-        </li>
-      </ul>
-    {% endfor %}
+      <p>動作確認です</p>
+      {% for channel in channels %}
+      <p>{{ channel.name }}</p>
+      {% endfor %}
   </body>
 </html>
