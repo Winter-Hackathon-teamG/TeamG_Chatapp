@@ -18,6 +18,7 @@
             name="password2"
           />
           <button class="pink">SIGN UP</button>
+          {#
           {% with messages = get_flashed_messages() %}
             {% if messages %}
               <ul class="flashes">
@@ -27,9 +28,10 @@
               </ul>
             {% endif %}
           {% endwith %}
-          <a class="switch-register-mode" href="{{ url_for('login') }}">
+          #}
+          {# <a class="switch-register-mode" href="{{ url_for('login') }}"> #}
           Already have an account?
-          </a>
+          {# </a> #}
         </form>
       </div>
     </div>
