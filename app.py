@@ -1,24 +1,32 @@
 from flask import Flask, request, redirect, render_template, session, flash
 from models import dbConnect
+import uuid
 
 app = Flask(__name__)
+app.secret_key = uuid.uuid4().hex
+
 
 #ホーム画面（チャンネル一覧画面）の作成
 @app.route('/')
 def index():
-    # # セッション情報からuidキーに対応する値を取り出して変数uidに代入
-    # uid = session.get('uid')
-    # #uidが空＝セッション情報の中にuid情報が登録されていない＝まだログインしていない場合
-    # if uid is None:
-    #     #ログイン画面へリダイレクト。
-    #     return redirect('/login')
+    """ ユーザーID
 
-    # #uidが空でない＝セッション情報の中にuid情報が登録されている＝ログイン済みの場合
+    ユーザーIDをセッションから取得してuidに代入
+    ユーザーIDが無ければログインページへリダイレクト
+    """
+    #! ユーザー機能作成までコメントアウト
+    # uid = session.get('uid')
+    # if uid is None:
+    #     return redirect('/login')
     # else:
-    #     #データベースからチャンネル情報を取得して変数channelsへ代入
-    channels = dbConnect.getChannelAll()
-    #ホーム画面のWEBページを返す。HTMLファイルで使う変数は引数で渡す。
-    return render_template('test_index.html', channels=channels) #! uidを追記
+
+    """チャンネル一覧表示
+
+    データベースから全てのチャンネルを取得→channelsへ代入
+    チャンネル一覧画面を表示
+    """
+    channels = dbConnect.getChannelAll() #! インデント必要
+    return render_template('test_index.html', channels=channels) #! uidを追加
 
 @app.route('/', methods=['POST'])
 def add_channel():
@@ -117,10 +125,9 @@ def detail(cid):
     # messages = dbConnect.getMessageAll(cid)
     return render_template('test_detail.html', channel=channel) #! messages,uidを追加
 
-
-# メッセージ作成機能
-@app.route('/message', methods=['POST'])
-def add_message():
+# チャンネル削除機能
+@app.route('/delete/<cid>')
+def delete_channel(cid):
     """ ユーザーID
 
     ユーザーIDをセッションから取得してuidに代入
@@ -130,7 +137,39 @@ def add_message():
     # uid = session.get('uid')
     # if uid is None:
     #     return redirect('/login')
+    
+    # else:
 
+    """ ユーザーIDがチャンネル作成者と一致しているかの確認
+
+        データベースからURLで指定されたcidに該当するチャンネルを取得
+
+        if データベースから取得したチャンネルのユーザーID(=チャンネルの作成者)が
+        現在アクセスしているユーザーIDと異なる場合:
+            「チャンネルは作成者のみ削除可能です」と表示
+            チャンネル一覧画面へリダイレクト
+    """
+    #!    ユーザー機能作成までコメントアウト
+    #     channel = dbConnect.getChannelById(cid)
+    #     if channel['uid'] != uid:
+    #         flash('チャンネルは作成者のみ削除可能です')
+    #         return redirect('/')
+    #     else:
+
+    """ チャンネル削除処理
+        else:(ユーザーIDが同じ場合)
+            データベースから該当するcidのチャンネルを削除
+            データベースから登録されている全てのチャンネルを取得
+            チャンネル一覧画面を表示
+    """
+    #! 下記3行はインデント必要
+    dbConnect.deleteChannel(cid)
+    channels = dbConnect.getChannelAll()
+    return render_template('test_index.html', channels=channels) #! uidを追加
+
+# メッセージ作成機能
+@app.route('/message', methods=['POST'])
+def add_message():
     """メッセージ
 
     メッセージをフォームから取得→messageへ代入
