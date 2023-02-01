@@ -137,7 +137,6 @@ def delete_channel(cid):
     # uid = session.get('uid')
     # if uid is None:
     #     return redirect('/login')
-    
     # else:
 
     """ ユーザーIDがチャンネル作成者と一致しているかの確認
@@ -170,6 +169,16 @@ def delete_channel(cid):
 # メッセージ作成機能
 @app.route('/message', methods=['POST'])
 def add_message():
+    """ ユーザーID
+
+    ユーザーIDをセッションから取得してuidに代入
+    ユーザーIDが無ければログインページへリダイレクト
+    """
+    #! ユーザー機能作成までコメントアウト
+    # uid = session.get('uid')
+    # if uid is None:
+    #     return redirect('/login')
+
     """メッセージ
 
     メッセージをフォームから取得→messageへ代入

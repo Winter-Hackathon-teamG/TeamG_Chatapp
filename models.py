@@ -138,19 +138,19 @@ class dbConnect:
         execute文にsqlと削除するチャンネルのcidを渡して実行
         commitで変更を確定
         """
-        
+
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = "DELETE FROM channels WHERE id=%s;"
             cur.execute(sql, (cid))
             conn.commit()
-            
+
         # 例外処理
         except Exception as e:
             print(e + 'が発生しています')
             return None
-            
+
         # 最終処理：カーソルを閉じる
         finally:
             cur.close()
@@ -172,12 +172,12 @@ class dbConnect:
             sql = 'INSERT INTO messages(uid, cid, message) VALUES(%s, %s, %s)'
             cur.execute(sql, (uid, cid, message))
             conn.commit()
-            
+
         # 例外処理
         except Exception as e:
             print(e + 'が発生しています')
             return None
-            
+
         # 最終処理：カーソルを閉じる
         finally:
             cur.close()
