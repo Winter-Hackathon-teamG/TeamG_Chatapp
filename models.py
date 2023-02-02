@@ -56,7 +56,7 @@ class dbConnect:
             cur.close()
 
     # チャンネル追加(ユーザーID, チャンネル名, チャンネル概要)
-    def addChannel(newChannelName, newChannelDescription): #! uidを追加
+    def addChannel(uid, newChannelName, newChannelDescription): #! uidを追加
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
@@ -67,8 +67,6 @@ class dbConnect:
         """
 
         try:
-            #! 仮uid
-            uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = 'INSERT INTO channels (uid, name, abstract) VALUES (%s, %s, %s);'
@@ -179,5 +177,31 @@ class dbConnect:
             return None
 
         # 最終処理：カーソルを閉じる
+        finally:
+            cur.close()
+
+    # メッセージ削除(メッセージID)
+    def deleteMessage(message_id):
+        """
+        DBクラスに定義した接続用メソッドを使用してDBに接続→connへ代入
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入
+        execute関数でsql文を実行(messagesテーブルからメッセージのidが一致するデータを削除)
+        commitで変更を確定
+        """
+
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'DELETE FROM messages WHERE id=%s'
+            cur.execute(sql, (message_id))
+            conn.commit()
+
+        # 例外処理
+        except Exception as e:
+            print(e + '発生しています')
+            return None
+
+        # 最終処理:カーソルを閉じる
         finally:
             cur.close()
