@@ -83,7 +83,7 @@ def update_channel():
 
     データベースの（ユーザーID、チャンネル名、チャンネル説明文）を更新
     データベースから改めてチャンネルを取得
-    （！コメントアウト　データベースから全てのメッセージを取得）
+    （！コメントアウト データベースから全てのメッセージを取得）
     メッセージ一覧画面を表示
     """
 
@@ -116,7 +116,7 @@ def detail(cid):
 
     URLよりチャンネルIDを取得→cidに代入
     データベースから該当するcidのチャンネルを取得
-    （！コメントアウト　データベースから全てのメッセージを取得）
+    （！コメントアウト データベースから全てのメッセージを取得）
     メッセージ一覧画面を表示
     """
     cid = cid
@@ -165,6 +165,45 @@ def delete_channel(cid):
     dbConnect.deleteChannel(cid)
     channels = dbConnect.getChannelAll()
     return render_template('test_index.html', channels=channels) #! uidを追加
+
+# メッセージ作成機能
+@app.route('/message', methods=['POST'])
+def add_message():
+    """ ユーザーID
+
+    ユーザーIDをセッションから取得してuidに代入
+    ユーザーIDが無ければログインページへリダイレクト
+    """
+    #! ユーザー機能作成までコメントアウト
+    # uid = session.get('uid')
+    # if uid is None:
+    #     return redirect('/login')
+
+    """メッセージ
+
+    メッセージをフォームから取得→messageへ代入
+    チャンネルIDをフォームから取得(hidden)→channel_idへ代入
+    if メッセージが存在する場合:
+        データベースに(ユーザーID, チャンネルID, メッセージ)を追加
+
+    同チャンネルのチャンネルIDをDBから取得→channelに代入
+    同チャンネルのメッセージをDBから全て取得→messagesに代入
+
+    メッセージ一覧画面を表示(message, channel, uid)
+    """
+    message = request.form.get('message')
+    channel_id = request.form.get('channel_id')
+
+    #! 仮uid
+    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    if message:
+        dbConnect.createMessage(uid, channel_id, message)
+
+    channel = dbConnect.getChannelById(channel_id)
+    #! メッセージ一覧表示機能作成までコメントアウト
+    # messages = dbConnect.getMessageAll(channel_id)
+
+    return render_template('test_detail.html', channel=channel, uid=uid) #! messages=messages追記
 
 if __name__ == '__main__':
     app.run(debug=True)

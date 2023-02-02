@@ -1,27 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
   <head>
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>チャンネル一覧表示・削除機能テスト</title>
+      <title>test index</title>
   </head>
   <body>
-    <p>チャンネル一覧表示・削除機能の動作確認です</p>
-    <!-- チャンネル削除機能テスト
-    flask for文による繰り返し処理
-      [チャンネル名]：[チャンネル説明文]　※[]は変数
-    　 削除ボタン（データ送信先：'/delete/[チャンネルID]', メソッド：GET,　値：'削除'　)
-    -->
+  <p>動作確認です</p>
+    <!-- チャンネル作成機能確認用フォーム -->
+    <form action="/" method="POST">
+        <label for="channel-title">チャンネル名:</label>
+        <input type="text" name="channel-title" placeholder="チャンネル名"><br>
+        <label for="channel-description">チャンネル概要:</label>
+        <input type="text" name="channel-description" placeholder="チャンネル概要"><br>
+        <input type="submit" value="作成">
+    </form>
+    <!-- チャンネル一覧表示/削除機能確認用 -->
     <ul>
-      {% for channel in channels %}
-        <li>
-          {{ channel.name }}:{{ channel.abstract }}
-          <form action="/delete/{{ channel.id }}" method="GET">
+    {% for channel in channels %}
+      <li>
+        <a href="{{ url_for('detail', cid=channel.id)}}">{{ channel.name }}</a>
+        <form action="/delete/{{ channel.id }}" method="GET">
           <input type="submit" value="削除">
-          </form>
-        </li>
-      {% endfor %}
+        </form>
+      </li>
+    {% endfor %}
     </ul>
   </body>
 </html>

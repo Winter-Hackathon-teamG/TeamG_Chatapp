@@ -137,13 +137,40 @@ class dbConnect:
         channelsテーブルから該当するcidのチャンネルデータを削除するSQL文→sqlへ代入
         execute文にsqlと削除するチャンネルのcidを渡して実行
         commitで変更を確定
-
         """
+
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = "DELETE FROM channels WHERE id=%s;"
             cur.execute(sql, (cid))
+            conn.commit()
+
+        # 例外処理
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+
+        # 最終処理：カーソルを閉じる
+        finally:
+            cur.close()
+
+    # メッセージ作成(ユーザーID, チャンネルID, メッセージ)
+    def createMessage(uid, cid, message):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入
+        * 「INSERT INTO テーブル名(列名1,列名2,...)VALUES(値1,値2,...);」
+        execute文でsqlを実行(messagesテーブル(ユーザーID, チャンネルID, メッセージ)列にそれぞれ登録)
+        commitで変更を確定
+        """
+
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'INSERT INTO messages(uid, cid, message) VALUES(%s, %s, %s)'
+            cur.execute(sql, (uid, cid, message))
             conn.commit()
 
         # 例外処理
