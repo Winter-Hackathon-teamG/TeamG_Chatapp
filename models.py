@@ -56,7 +56,7 @@ class dbConnect:
             cur.close()
 
     # チャンネル追加(ユーザーID, チャンネル名, チャンネル概要)
-    def addChannel(uid, newChannelName, newChannelDescription): #! uidを追加
+    def addChannel(uid, newChannelName, newChannelDescription):
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
