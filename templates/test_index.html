@@ -7,7 +7,7 @@
       <title>test index</title>
   </head>
   <body>
-  <p>動作確認です</p>
+    <p>動作確認です</p>
     <!-- チャンネル作成機能確認用フォーム -->
     <form action="/" method="POST">
         <label for="channel-title">チャンネル名:</label>
@@ -16,14 +16,11 @@
         <input type="text" name="channel-description" placeholder="チャンネル概要"><br>
         <input type="submit" value="作成">
     </form>
-    <!-- チャンネル一覧表示/削除機能確認用 -->
+    <!-- チャンネル一覧表示確認用 -->
     <ul>
     {% for channel in channels %}
       <li>
         <a href="{{ url_for('detail', cid=channel.id)}}">{{ channel.name }}</a>
-        <form action="/delete/{{ channel.id }}" method="GET">
-          <input type="submit" value="削除">
-        </form>
       </li>
     {% endfor %}
     </ul>

@@ -95,11 +95,10 @@ def update_channel():
     uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
     dbConnect.updateChannel(uid, channel_name, channel_description, cid)
     channel = dbConnect.getChannelById(cid)
-    #! メッセージ機能作成までコメントアウト
-    # messages = dbConnect.getMessageAll(cid)
-    return render_template('test_detail.html', channel=channel, uid=uid) #! messagesを追加
+    messages = dbConnect.getMessageAll(cid)
+    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid)
 
-# メッセージ一覧画面（チャンネル編集機能用にチャンネル名とチャンネル概要のみ表示する画面）
+# メッセージ一覧画面
 @app.route('/detail/<cid>')
 def detail(cid):
     """ ユーザーID
@@ -116,14 +115,13 @@ def detail(cid):
 
     URLよりチャンネルIDを取得→cidに代入
     データベースから該当するcidのチャンネルを取得
-    （！コメントアウト データベースから全てのメッセージを取得）
+    データベースから該当するcidの全てのメッセージを取得
     メッセージ一覧画面を表示
     """
     cid = cid
     channel = dbConnect.getChannelById(cid)
-    #! メッセージ機能作成までコメントアウト
-    # messages = dbConnect.getMessageAll(cid)
-    return render_template('test_detail.html', channel=channel) #! messages,uidを追加
+    messages = dbConnect.getMessageAll(cid)
+    return render_template('test_detail.html', messages=messages, channel=channel) #! uidを追加
 
 # チャンネル削除機能
 @app.route('/delete/<cid>')
@@ -200,10 +198,9 @@ def add_message():
         dbConnect.createMessage(uid, channel_id, message)
 
     channel = dbConnect.getChannelById(channel_id)
-    #! メッセージ一覧表示機能作成までコメントアウト
-    # messages = dbConnect.getMessageAll(channel_id)
+    messages = dbConnect.getMessageAll(channel_id)
 
-    return render_template('test_detail.html', channel=channel, uid=uid) #! messages=messages追記
+    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid)
 
 if __name__ == '__main__':
     app.run(debug=True)
