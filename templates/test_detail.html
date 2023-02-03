@@ -46,6 +46,12 @@
   {% if messages %}
     {% for message in messages %}
     <p>{{ message.user_name }}:{{ message.message }}</p>
+      <form action="/delete_message" method="POST">
+        <input type="hidden" name="message_id" value={{ message.id }}>
+        <input type="hidden" name="channel_id" value={{ channel.id }}>
+        <input type="submit" value="削除">
+      </form>
+
     {% endfor %}
   {% else %}
     <p>まだメッセージがありません</p>

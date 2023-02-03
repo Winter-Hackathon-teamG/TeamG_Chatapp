@@ -52,11 +52,13 @@ def add_channel():
     else: (チャンネル名がデータベースに存在した場合)
         エラーページを表示
     """
+    #! 仮uid
+    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
     channel_name = request.form.get('channel-title')
     channel = dbConnect.getChannelByName(channel_name)
     if channel == None:
         channel_description = request.form.get('channel-description')
-        dbConnect.addChannel(channel_name, channel_description) #! uidを追加
+        dbConnect.addChannel(uid, channel_name, channel_description)
         return redirect('/')
     else:
         error = '既に同じチャンネルが存在しています'
@@ -199,6 +201,41 @@ def add_message():
 
     channel = dbConnect.getChannelById(channel_id)
     messages = dbConnect.getMessageAll(channel_id)
+
+    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid)
+
+# メッセージ削除機能
+@app.route('/delete_message', methods=['POST'])
+def delete_message():
+    """ ユーザーID
+
+    ユーザーIDをセッションから取得してuidに代入
+    ユーザーIDが無ければログインページへリダイレクト
+    """
+    #! ユーザー機能作成までコメントアウト
+    # uid = session.get('uid')
+    # if uid is None:
+    #     return redirect('/login')
+
+    """
+    メッセージIDをフォームから取得→message_idに代入
+    チャンネルIDをフォームから取得→cidに代入
+    if メッセージIDが存在したら:
+        dbConnectクラスのdeleteMessageメソッドを実行(該当のメッセージを削除)
+
+    チャンネルIDからチャンネルを取得→channelに代入
+    チャンネルIDから該当のメッセージを全て取得→messagesに代入
+    """
+
+    #! 仮uid
+    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    message_id = request.form.get('message_id')
+    cid = request.form.get('channel_id')
+    if message_id:
+        dbConnect.deleteMessage(message_id)
+
+    channel = dbConnect.getChannelById(cid)
+    messages = dbConnect.getMessageAll(cid)
 
     return render_template('test_detail.html', messages=messages, channel=channel, uid=uid)
 
