@@ -2,26 +2,86 @@ import pymysql
 from util.DB import DB
 
 class dbConnect:
-#チャンネル一覧取得機能
-    def getChannelAll():
+    # ユーザーを作成
+    def createUser(user):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入
+         「usersテーブルの(uid,user_name,email,password)列へそれぞれ値を挿入」
+        execute文にsqlと挿入する値(userのインスタンス変数)を渡して実行
+        commitで変更を確定
+        """
         try:
-            #MySQLに接続(DBクラスで定義した接続用メソッドを使用)
             conn = DB.getConnection()
-            #カーソルを作成し、変数curへ代入
             cur = conn.cursor()
-            #カーソルに対してchannelsテーブルの全カラムの値を取得するSQL文を実行
-            sql = 'SELECT * FROM channels;'
-            cur.execute(sql)
-            #実行結果を全て取り出し変数channelsに入れて返す
-            channels = cur.fetchall()
-            return channels
+            sql = 'INSERT INTO users (uid, user_name, email, password) VALUES (%s, %s, %s, %s);'
+            cur.execute(sql, (user.uid, user.name, user.email, user.password))
+            conn.commit()
 
-        #例外処理
+        # 例外処理
+        except Exception as e:
+            print(e, 'が発生しています')
+            return None
+
+        #最終処理 カーソルを閉じる
+        finally:
+            cur.close()
+
+    # 指定したemailに該当するユーザーを取得
+    def getUser(email):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入
+         「usersテーブルから指定したemailに該当する行の全カラムを取得」
+        execute文にsqlとemailを渡して実行
+        fetchoneでemailが一致する1行のみデータを取得→userに代入
+        userを返す
+        """
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'SELECT * FROM users WHERE email=%s;'
+            cur.execute(sql, (email))
+            user = cur.fetchone()
+            return user
+
+        # 例外処理
         except Exception as e:
             print(e + 'が発生しています')
             return None
 
         #最終処理 カーソルを閉じる
+        finally:
+            cur.close()
+
+
+    #チャンネル一覧取得機能
+    def getChannelAll():
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入:「channelsテーブルの全カラムの値を取得する」
+        execute文でsqlを実行
+        実行結果を全て取り出し変数channelsに代入
+        channelsを返す
+        """
+
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'SELECT * FROM channels;'
+            cur.execute(sql)
+            channels = cur.fetchall()
+            return channels
+
+        # 例外処理
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+
+        # 最終処理:カーソルを閉じる
         finally:
             cur.close()
 
@@ -56,7 +116,7 @@ class dbConnect:
             cur.close()
 
     # チャンネル追加(ユーザーID, チャンネル名, チャンネル概要)
-    def addChannel(uid, newChannelName, newChannelDescription):
+    def addChannel(newChannelName, newChannelDescription): #! uidを追加
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
@@ -67,6 +127,8 @@ class dbConnect:
         """
 
         try:
+            #! 仮uid
+            uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = 'INSERT INTO channels (uid, name, abstract) VALUES (%s, %s, %s);'
@@ -180,7 +242,6 @@ class dbConnect:
         finally:
             cur.close()
 
-    # メッセージ全取得(チャンネルID)
     def getMessageAll(cid):
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
@@ -188,12 +249,12 @@ class dbConnect:
         sqlにSQL文を代入:「uid列を軸としてmessagesテーブルとusersテーブルを結合させる。
         その上で、該当するcidの行から(メッセージID、ユーザーID、ユーザー名、メッセージ)を取得する」
         * 内部結合の構文(
-            SELECT <カラム名>
-            FROM <結合元テーブル名> AS 略称
-            INNER JOIN <結合先テーブル名> AS 略称
-            ON <結合元テーブルのカラム名> = <結合先テーブルのカラム名>
-            WHERE 条件;
-            )
+          SELECT <カラム名>
+          FROM <結合元テーブル名> AS 略称
+          INNER JOIN <結合先テーブル名> AS 略称
+          ON <結合元テーブルのカラム名> = <結合先テーブルのカラム名>
+          WHERE 条件;
+          )
         cidを指定してexecute文でsqlを実行
         取得したデータを全て取り出す→messagesに代入
         messagesを返す
@@ -201,7 +262,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "SELECT m.id, u.uid, u.user_name, m.message FROM messages AS m INNER JOIN users AS u ON m.uid = u.uid WHERE cid = %s;"
+            sql = "SELECT id, u.uid, user_name, message FROM messages AS m INNER JOIN users AS u ON m.uid = u.uid WHERE cid = %s;"
             cur.execute(sql, (cid))
             messages = cur.fetchall()
             return messages
@@ -212,31 +273,5 @@ class dbConnect:
             return None
 
         # 最終処理：カーソルを閉じる
-        finally:
-            cur.close()
-
-    # メッセージ削除(メッセージID)
-    def deleteMessage(message_id):
-        """
-        DBクラスに定義した接続用メソッドを使用してDBに接続→connへ代入
-        カーソルを作成→curへ代入
-        sqlにSQL文を代入
-        execute関数でsql文を実行(messagesテーブルからメッセージのidが一致するデータを削除)
-        commitで変更を確定
-        """
-
-        try:
-            conn = DB.getConnection()
-            cur = conn.cursor()
-            sql = 'DELETE FROM messages WHERE id=%s'
-            cur.execute(sql, (message_id))
-            conn.commit()
-
-        # 例外処理
-        except Exception as e:
-            print(e + '発生しています')
-            return None
-
-        # 最終処理:カーソルを閉じる
         finally:
             cur.close()
