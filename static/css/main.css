@@ -1,0 +1,4 @@
+.channelpage {
+  display: flex;
+  flex-direction: column;
+}
