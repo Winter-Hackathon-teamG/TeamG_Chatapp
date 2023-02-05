@@ -1,10 +1,100 @@
 from flask import Flask, request, redirect, render_template, session, flash
 from models import dbConnect
+from util.DB import DB
+from util.user import User
+from datetime import timedelta
+import hashlib
 import uuid
+import re
 
 app = Flask(__name__)
+# セッション情報を暗号化するためのキーを設定。キー：16進数文字列のuuid(uuid4()により生成)
 app.secret_key = uuid.uuid4().hex
+# セッションの有効期間を30日間とする
+app.permanent_session_lifetime = timedelta(days=30)
 
+# ユーザー登録画面（メソッド：GET）
+@app.route('/signup')
+def signup():
+    """ ユーザー登録
+
+    ユーザー登録画面を表示
+    """
+    return render_template('registration/test_signup.html')
+
+# ユーザー登録画面（メソッド：POST）
+@app.route('/signup', methods=['POST'])
+def userSignup():
+    """ ユーザー登録
+
+    フォームからユーザー名を取得→nameへ代入
+    フォームからメールアドレスを取得→emailへ代入
+    フォームからパスワード1を取得→password1へ代入
+    フォームからパスワード2を取得→password2へ代入
+
+    メールアドレスを正規表現で表す→patternへ代入
+    (a-zA-Z0-9_.+-の中から1文字以上)@(a-zA-Z0-9-の中から1文字以上).(a-zA-Z0-9-.の中から1文字以上)
+
+    if ユーザー名、メールアドレス、パスワード1、パスワード2のいずれかに空欄がある場合
+        「空のフォームがあるようです」と表示
+
+    elif パスワード1とパスワード2が異なる場合
+        「二つのパスワードの値が違っています」と表示
+
+    elif 入力されたメールアドレスがpatternと一致しない場合
+        「正しいメールアドレスの形式ではありません」と表示
+          *reモジュール:正規表現を扱うモジュール
+           match(正規表現, 文字列):文字列が正規表現と一致するかを判定
+
+    else (いずれにも当てはまらない場合)
+        uuidを生成→uidに代入
+         *uuid:世界で同じ値を持つことがない一意な識別子。バージョン1~5の生成方法がある。
+          uuid4():乱数によりuuidを生成
+        パスワードをsha256方式でハッシュ化し16進数文字列に変換→passwordに代入
+         *sha256():ハッシュ化を施すアルゴリズムの1つ
+          hexdigest():16進数形式の文字列に変換して返す
+        Userクラスのインスタンスを生成→userに代入
+        フォームから取得したメールアドレスに一致するユーザーをデータベースから取得→DBuserに代入
+
+        if DBuserがNoneでない場合=既に同じメールアドレスのユーザーが登録されている場合
+            「既に登録されているようです」と表示
+
+        else （同じメールアドレスで登録されているユーザーがいない場合）
+            データベースにユーザーを新規登録
+            uidをstr型に型変換
+            セッション情報にuidを登録(キー:uid, 値:UserId)
+            * セッション情報はsessionオブジェクト(辞書型)として操作する
+            チャンネル一覧表示画面へリダイレクト
+
+    (最後のelse節以外の場合は)サインアップ画面へリダイレクト
+    """
+    name = request.form.get('name')
+    email = request.form.get('email')
+    password1 = request.form.get('password1')
+    password2 = request.form.get('password2')
+
+    pattern = '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+
+    if name == '' or email == '' or password1 == '' or password2 == '':
+        flash('空のフォームがあるようです')
+    elif password1 != password2:
+        flash('二つのパスワードの値が違っています')
+    elif re.match(pattern, email) is None:
+        flash('正しいメールアドレスの形式ではありません')
+    else:
+        uid = uuid.uuid4()
+        password = hashlib.sha256(password1.encode('utf-8')).hexdigest()
+        user = User(uid, name, email, password)
+        DBuser = dbConnect.getUser(email)
+
+        if DBuser != None:
+            flash('既に登録されているようです')
+        else:
+            dbConnect.createUser(user)
+            UserId = str(uid)
+            session['uid'] = UserId
+            return redirect('/')
+    return redirect('/signup')
 
 #ホーム画面（チャンネル一覧画面）の作成
 @app.route('/')

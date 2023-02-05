@@ -2,26 +2,86 @@ import pymysql
 from util.DB import DB
 
 class dbConnect:
-#チャンネル一覧取得機能
-    def getChannelAll():
+    # ユーザーを作成
+    def createUser(user):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入
+         「usersテーブルの(uid,user_name,email,password)列へそれぞれ値を挿入」
+        execute文にsqlと挿入する値(userのインスタンス変数)を渡して実行
+        commitで変更を確定
+        """
         try:
-            #MySQLに接続(DBクラスで定義した接続用メソッドを使用)
             conn = DB.getConnection()
-            #カーソルを作成し、変数curへ代入
             cur = conn.cursor()
-            #カーソルに対してchannelsテーブルの全カラムの値を取得するSQL文を実行
-            sql = 'SELECT * FROM channels;'
-            cur.execute(sql)
-            #実行結果を全て取り出し変数channelsに入れて返す
-            channels = cur.fetchall()
-            return channels
+            sql = 'INSERT INTO users (uid, user_name, email, password) VALUES (%s, %s, %s, %s);'
+            cur.execute(sql, (user.uid, user.name, user.email, user.password))
+            conn.commit()
 
-        #例外処理
+        # 例外処理
+        except Exception as e:
+            print(e, 'が発生しています')
+            return None
+
+        #最終処理 カーソルを閉じる
+        finally:
+            cur.close()
+
+    # 指定したemailに該当するユーザーを取得
+    def getUser(email):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入
+         「usersテーブルから指定したemailに該当する行の全カラムを取得」
+        execute文にsqlとemailを渡して実行
+        fetchoneでemailが一致する1行のみデータを取得→userに代入
+        userを返す
+        """
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'SELECT * FROM users WHERE email=%s;'
+            cur.execute(sql, (email))
+            user = cur.fetchone()
+            return user
+
+        # 例外処理
         except Exception as e:
             print(e + 'が発生しています')
             return None
 
         #最終処理 カーソルを閉じる
+        finally:
+            cur.close()
+
+
+    #チャンネル一覧取得機能
+    def getChannelAll():
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入:「channelsテーブルの全カラムの値を取得する」
+        execute文でsqlを実行
+        実行結果を全て取り出し変数channelsに代入
+        channelsを返す
+        """
+
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'SELECT * FROM channels;'
+            cur.execute(sql)
+            channels = cur.fetchall()
+            return channels
+
+        # 例外処理
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+
+        # 最終処理:カーソルを閉じる
         finally:
             cur.close()
 
