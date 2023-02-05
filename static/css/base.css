@@ -6,3 +6,88 @@
   font-size: 20px;
   box-sizing: border-box;
 }
+
+body {
+  margin: 0 auto;
+  min-height: 100vh;
+  width: 100vh;
+  color: aliceblue;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+h1 {
+  font-size: 40px;
+  font-weight: 900;
+}
+
+input,
+textarea,
+button {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  outline: none;
+}
+
+textarea {
+  resize: none;
+  height: 100%;
+  width: 100%;
+  letter-spacing: 0.1em;
+  font-size: 16px;
+}
+
+input {
+  letter-spacing: 0.1em;
+
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: aliceblue;
+}
+
+input:hover,
+button:hover {
+  cursor: pointer;
+}
+
+button {
+  color: aliceblue;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5em 0.3em;
+  margin: 16px auto;
+}
+
+.basic-btn {
+  background-color: aliceblue;
+}
+
+.basic-btn:hover {
+  background-color: aliceblue;
+}
+
+.smaller-btn {
+  margin: 0;
+  padding: 0.2em 0.3em;
+  font-size: 16px;
+}
+
+.main-container {
+  min-height: 100vh;
+  padding-left: 70px;
+  position: relativex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
