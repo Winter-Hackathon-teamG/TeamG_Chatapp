@@ -43,16 +43,16 @@ def userSignup():
 
     elif 入力されたメールアドレスがpatternと一致しない場合
         「正しいメールアドレスの形式ではありません」と表示
-          *reモジュール:正規表現を扱うモジュール
-           match(正規表現, 文字列):文字列が正規表現と一致するかを判定
+        *reモジュール:正規表現を扱うモジュール
+        match(正規表現, 文字列):文字列が正規表現と一致するかを判定
 
     else (いずれにも当てはまらない場合)
         uuidを生成→uidに代入
-         *uuid:世界で同じ値を持つことがない一意な識別子。バージョン1~5の生成方法がある。
-          uuid4():乱数によりuuidを生成
+        *uuid:世界で同じ値を持つことがない一意な識別子。バージョン1~5の生成方法がある。
+        uuid4():乱数によりuuidを生成
         パスワードをsha256方式でハッシュ化し16進数文字列に変換→passwordに代入
-         *sha256():ハッシュ化を施すアルゴリズムの1つ
-          hexdigest():16進数形式の文字列に変換して返す
+        *sha256():ハッシュ化を施すアルゴリズムの1つ
+        hexdigest():16進数形式の文字列に変換して返す
         Userクラスのインスタンスを生成→userに代入
         フォームから取得したメールアドレスに一致するユーザーをデータベースから取得→DBuserに代入
 
@@ -95,6 +95,58 @@ def userSignup():
             session['uid'] = UserId
             return redirect('/')
     return redirect('/signup')
+
+# ログイン画面(メソッド:GET)
+@app.route('/login')
+def login():
+    """ログイン
+
+    ログイン画面を表示
+    """
+    return render_template('registration/test_login.html')
+
+# ログイン画面(メソッド:POST)
+@app.route('/login', methods=['POST'])
+def userLogin():
+    """ログイン
+
+    メールアドレスをフォームから取得→emailに代入
+    パスワードをフォームから取得→passwordへ代入
+
+    if emailもしくはpasswordが空白の場合:
+        「空のフォームがあるようです」と表示
+    else:
+        データベースから入力されたemailと一致するユーザーを取得→userへ代入
+        if ユーザーが存在しない場合:
+            「このユーザーは存在しません」と表示
+        else:
+            入力されたパスワードをsha256方式でハッシュ化し16進数文字列に変換→hashPasswordに代入
+            if hashPasswordとデータベースに登録されているユーザーのpasswordが一致しない場合:
+                「パスワードが間違っています」と表示
+            else:(hashPasswordがデータベースにある値と一致した場合)
+                データベースからuserテーブルのuidをセッション情報の登録
+                ホーム(チャンネル一覧)画面にリダイレクト
+
+    その他の場合、ログイン画面へリダイレクト
+
+    """
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    if email == '' or password == '':
+        flash('空のフォームがあるようです')
+    else:
+        user = dbConnect.getUser(email)
+        if user is None:
+            flash('このユーザーは存在しません')
+        else:
+            hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
+            if hashPassword != user['password']:
+                flash('パスワードが間違っています')
+            else:
+                session['uid'] = user['uid']
+                return redirect('/')
+    return redirect('/login')
 
 #ホーム画面（チャンネル一覧画面）の作成
 @app.route('/')

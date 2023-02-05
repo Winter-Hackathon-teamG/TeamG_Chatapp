@@ -8,7 +8,7 @@ class dbConnect:
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
         sqlにSQL文を代入
-         「usersテーブルの(uid,user_name,email,password)列へそれぞれ値を挿入」
+        「usersテーブルの(uid,user_name,email,password)列へそれぞれ値を挿入」
         execute文にsqlと挿入する値(userのインスタンス変数)を渡して実行
         commitで変更を確定
         """
@@ -34,7 +34,7 @@ class dbConnect:
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
         sqlにSQL文を代入
-         「usersテーブルから指定したemailに該当する行の全カラムを取得」
+        「usersテーブルから指定したemailに該当する行の全カラムを取得」
         execute文にsqlとemailを渡して実行
         fetchoneでemailが一致する1行のみデータを取得→userに代入
         userを返す
