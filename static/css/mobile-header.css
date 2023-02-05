@@ -1,0 +1,15 @@
+#burger-icon,
+#burger-close-icon {
+  display: block;
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+  background-color: aliceblue;
+  color: aliceblue;
+  border-radius: 50%;
+  text-align: center;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 5;
+}
