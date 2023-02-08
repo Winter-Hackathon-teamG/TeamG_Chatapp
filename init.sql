@@ -33,7 +33,7 @@ CREATE TABLE channels (
     uid varchar(255) REFERENCES users(uid),
     name varchar(255) UNIQUE NOT NULL,
     abstract varchar(255),
-    tid integer REFERENCES tags(id)
+    tid integer REFERENCES tags(id) NOT NULL
 );
 
 -- messagesテーブルの作成
