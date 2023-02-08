@@ -27,7 +27,7 @@ CREATE TABLE users (
 --   [id]チャンネルID:主キー、serial型はオートインクリメントの重複しない整数
 --   [uid]ユーザーID:255字以内、userテーブルより参照
 --   [name]チャンネル名:255字以内、重複不可、空データ不可
---   [abstract]チャンネル概要:255字以内
+--   [abstract]チャンネル概要:255字以内, 空データ不可
 CREATE TABLE channels (
     id serial PRIMARY KEY,
     uid varchar(255) REFERENCES users(uid),
