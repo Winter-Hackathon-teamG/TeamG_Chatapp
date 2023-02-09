@@ -17,10 +17,8 @@
     />
   </head>
   <body>
-    {#
-      {% include '#'%} 
-      {% include '#'%}
-    #} 
+    {% include 'sidebar.html'%} 
+    {% include 'mobile-header.html'%}
     {% block body %}{% endblock %}
     {% block script %}{% endblock %}
     <script
