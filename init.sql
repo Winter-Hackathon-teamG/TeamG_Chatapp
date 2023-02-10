@@ -28,13 +28,13 @@ CREATE TABLE users (
 --   [uid]ユーザーID:255字以内、userテーブルより参照
 --   [name]チャンネル名:255字以内、重複不可、空データ不可
 --   [abstract]チャンネル概要:255字以内
-  -- [tid]タグID: 整数 tagsテーブルより参照 空データ不可
+  -- [tid]タグID: 整数 tagsテーブルより参照
 CREATE TABLE channels (
     id serial PRIMARY KEY,
     uid varchar(255) REFERENCES users(uid),
     name varchar(255) UNIQUE NOT NULL,
     abstract varchar(255),
-    tid integer REFERENCES tags(id) NOT NULL
+    tid integer REFERENCES tags(id)
 );
 
 -- messagesテーブルの作成
