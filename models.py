@@ -300,3 +300,31 @@ class dbConnect:
         # 最終処理:カーソルを閉じる
         finally:
             cur.close()
+
+    # タグ一覧取得機能
+    def getTagsAll():
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入:「tagsテーブルの全カラムの値を取得する」
+        execute文でsqlを実行
+        実行結果を全て取り出し変数tagsに代入
+        tagsを返す
+        """
+
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'SELECT * FROM tags;'
+            cur.execute(sql)
+            tags = cur.fetchall()
+            return tags
+
+        # 例外処理
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+
+        # 最終処理:カーソルを閉じる
+        finally:
+            cur.close()
