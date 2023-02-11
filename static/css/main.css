@@ -64,18 +64,15 @@ img {
 
 .channel-add button {
   margin: 30px 0;
-  /*colorスタイル未定*/
   background-color: #01B4EE;
   color:aliceblue;
 }
 
 .channel-add button:hover {
-  /*colorスタイル未定*/
   background-color: #0680a9;
 }
 
 .channel-box {
-  /* background-color: aliceblue; */
   background-color: transparent;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(4px);
@@ -108,7 +105,6 @@ img {
 }
 
 .channel-box li a:hover {
-  /*colorスタイル未定*/
   color: #4e5b66;
 }
 
@@ -121,8 +117,8 @@ img {
 
 .pagination-container {
   width: 100%;
-  border-bottom: 2px solid gray;/*color未定*/
-  box-shadow: 0 32px 30px -30px /*未定*/;
+  border-bottom: 2px solid gray;
+  box-shadow: 0 32px 30px -30px aliceblue;
 }
 
 .paginaition {
@@ -130,7 +126,6 @@ img {
 }
 
 .paginaition li.colored {
-  /*color未定*/
   /* background-color: aliceblue; */
   color: aliceblue;
 }
