@@ -84,8 +84,6 @@
   width: 32px;
 }
 
-.modal-gif {}
-
 .modal-body button {
   background-color: #01B4EE;
   color:aliceblue;
@@ -100,7 +98,6 @@
   .modal-content {
     margin: 35% auto;
   }
-  #modal-gif {}
 }
 
 @media screen and (min-width: 640px) and (max-width: 1023px) {
