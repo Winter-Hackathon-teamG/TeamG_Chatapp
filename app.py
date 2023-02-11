@@ -374,6 +374,27 @@ def delete_message():
 
     return render_template('test_detail.html', messages=messages, channel=channel, uid=uid)
 
+# タグ一覧表示
+@app.route('/tags')
+def tags():
+    """ ユーザーID
+
+    ユーザーIDをセッションから取得してuidに代入
+    ユーザーIDが無ければログインページへリダイレクト
+    """
+    uid = session.get('uid')
+    if uid is None:
+        return redirect('/login')
+
+        """タグ一覧表示
+
+        データベースから全てのタグを取得→tagsへ代入
+        タグ一覧を表示
+        """
+    else:
+        tags = dbConnect.getTagsAll()
+    return render_template('test_index.html', tags=tags, uid=uid)
+
 # 404エラー処理
 @app.errorhandler(404)
 def show_error404(error):
