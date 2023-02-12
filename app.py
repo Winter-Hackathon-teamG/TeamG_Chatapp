@@ -426,7 +426,7 @@ def tag_channel(tid):
         return render_template('test_index.html', tag_name=tag_name, tag_channels=tag_channels, uid=uid)
     else:
         flash('まだチャンネルは登録されていません')
-        return render_template('test_index.html', tag_name=tag_name, uid=uid)
+        return redirect('/')
 
 
 # 404エラー処理
