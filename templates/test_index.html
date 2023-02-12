@@ -17,6 +17,7 @@
         <input type="submit" value="作成">
     </form>
     <!-- チャンネル一覧表示確認用 -->
+    <a href="{{ url_for('index')}}">チャンネル一覧表示</a>
     <ul>
     {% for channel in channels %}
       <li>
@@ -27,8 +28,25 @@
     {# タグ一覧確認用 #}
     <a href="{{ url_for('tags')}}">タグ一覧表示</a>
     {% for tag in tags %}
-    <li>{{ tag.name }}</li>
+      <li><a href="{{ url_for('tag_channel', tid=tag.id) }}">{{ tag.name }}</a></li>
     {% endfor %}
+    {# タグに紐づけられたチャンネル表示確認用 #}
+    <p>{{ tag_name }}</p>
+    <ul>
+      {% for tag_channel in tag_channels %}
+      <li><a href="{{ url_for('detail', cid=tag_channel.id)}}">{{ tag_channel.name }}</a></li>
+      {% endfor %}
+    </ul>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
     <!-- サインアップ画面リンク -->
     <a href="{{ url_for('signup')}}">サインアップ画面へ</a>
 

@@ -328,3 +328,57 @@ class dbConnect:
         # 最終処理:カーソルを閉じる
         finally:
             cur.close()
+
+    # タグに紐づけられたチャンネルの取得
+    def getChannelsByTag(tid):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入:「channelsテーブルから指定したtidに該当するチャンネルを取得する」
+        execute文でsqlを実行
+        実行結果を全て取り出す→tag_channelsに代入
+        tag_channelsを返す
+        """
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'SELECT * FROM channels WHERE tid=%s;'
+            cur.execute(sql, (tid))
+            tag_channels = cur.fetchall()
+            return tag_channels
+
+        # 例外処理
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+
+        # 最終処理:カーソルを閉じる
+        finally:
+            cur.close()
+
+    # 指定されたタグidにマッチするタグの取得
+    def getTagById(tid):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入:「tagsテーブルから指定したtidに該当するタグを取得する」
+        execute文でsqlを実行
+        実行結果(指定したtidに該当するタグ1つ)を取り出す→tagに代入
+        tagを返す
+        """
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'SELECT * FROM tags WHERE id=%s;'
+            cur.execute(sql, (tid))
+            tag = cur.fetchone()
+            return tag
+
+        # 例外処理
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+
+        # 最終処理:カーソルを閉じる
+        finally:
+            cur.close()

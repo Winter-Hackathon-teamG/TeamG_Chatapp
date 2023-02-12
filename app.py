@@ -395,6 +395,40 @@ def tags():
         tags = dbConnect.getTagsAll()
     return render_template('test_index.html', tags=tags, uid=uid)
 
+# 選択されたタグに紐づけられたチャンネルの表示
+@app.route('/tag/<tid>')
+def tag_channel(tid):
+    """ ユーザーID
+
+    ユーザーIDをセッションから取得してuidに代入
+    ユーザーIDが無ければログインページへリダイレクト
+    """
+    uid = session.get('uid')
+    if uid is None:
+        return redirect('/login')
+
+    """タグに紐づけられたチャンネル表示
+
+    指定されたtidに該当するタグをデーターベースから取得
+    取得したタグのname列の値を取り出してtag_nameに代入
+    指定されたtidに紐づけられたチャンネルをデーターベースから取得
+
+    if タグに紐づけられたチャンネルが存在する場合
+        タグに紐づけられたチャンネル一覧を表示
+    else (存在しない場合)
+        「まだチャンネルは登録されていません」と表示
+    """
+    tag = dbConnect.getTagById(tid)
+    tag_name = tag['name']
+    tag_channels = dbConnect.getChannelsByTag(tid)
+
+    if tag_channels:
+        return render_template('test_index.html', tag_name=tag_name, tag_channels=tag_channels, uid=uid)
+    else:
+        flash('まだチャンネルは登録されていません')
+        return render_template('test_index.html', tag_name=tag_name, uid=uid)
+
+
 # 404エラー処理
 @app.errorhandler(404)
 def show_error404(error):
