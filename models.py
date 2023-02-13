@@ -115,13 +115,13 @@ class dbConnect:
         finally:
             cur.close()
 
-    # チャンネル追加(ユーザーID, チャンネル名, チャンネル概要)
-    def addChannel(uid, newChannelName, newChannelDescription):
+    # チャンネル追加(ユーザーID, チャンネル名, チャンネル概要, タグID)
+    def addChannel(uid, newChannelName, newChannelDescription, tid):
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
         sqlにSQL文を代入
-        execute文でsqlを実行(channelテーブルにユーザーID,チャンネル名,チャンネル概要を追加)
+        execute文でsqlを実行(channelテーブルにユーザーID,チャンネル名,チャンネル概要を追加,タグID)
         commitで変更を確定
         * commitとは - トランザクションの結果を確定する(変更を確定する)
         """
@@ -129,8 +129,8 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = 'INSERT INTO channels (uid, name, abstract) VALUES (%s, %s, %s);'
-            cur.execute(sql, (uid, newChannelName, newChannelDescription))
+            sql = 'INSERT INTO channels (uid, name, abstract, tid) VALUES (%s, %s, %s, %s);'
+            cur.execute(sql, (uid, newChannelName, newChannelDescription, tid))
             conn.commit()
 
         # 例外処理
@@ -170,20 +170,20 @@ class dbConnect:
         finally:
             cur.close()
 
-    # チャンネル更新(ユーザーID, チャンネル名, チャンネル概要)
-    def updateChannel(uid, newChannelName, newChannelDescription, cid):
+    # チャンネル更新(ユーザーID, チャンネル名, チャンネル概要、タグID)
+    def updateChannel(uid, newChannelName, newChannelDescription, cid, tid):
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
-        channelsテーブルで該当するcidの（ユーザーID,チャンネル名,チャンネル概要）を更新するSQL文→sqlへ代入
+        channelsテーブルで該当するcidの（ユーザーID,チャンネル名,チャンネル概要,タグID）を更新するSQL文→sqlへ代入
         execute文にsqlと更新する値の入った各変数を渡して実行
         commitで変更を確定
         カーソルを閉じる
         """
         conn = DB.getConnection()
         cur = conn.cursor()
-        sql = "UPDATE channels SET uid=%s, name=%s, abstract=%s WHERE id=%s;"
-        cur.execute(sql, (uid, newChannelName, newChannelDescription, cid))
+        sql = "UPDATE channels SET uid=%s, name=%s, abstract=%s, tid=%s WHERE id=%s;"
+        cur.execute(sql, (uid, newChannelName, newChannelDescription, cid, tid))
         conn.commit()
         cur.close()
 

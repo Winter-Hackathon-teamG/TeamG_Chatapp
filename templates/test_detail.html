@@ -7,17 +7,31 @@
   <title>test detail</title>
 </head>
 <body>
-  <p>動作確認です</p>
-  <a href="/">戻る</a>
+  <header>
+  {# ユーザー確認用 #}
+  <!-- ログアウト -->
+  <a href="{{ url_for('logout')}}">ログアウト</a>
+  {# タグ一覧画面 #}
+  <a href="{{ url_for('index') }}">ホーム画面へ</a>
+  </header>
+
+  <h2>[チャンネル]</h2>
 
   <!-- チャンネル削除機能確認 -->
-  <h2>[チャンネル]</h2>
-  <h3>チャンネル削除機能</h3>
-  <p>チャンネル名：{{ channel.name }}</p>
-  <p>チャンネル概要：{{ channel.abstract }}</p>
+  <h3>チャンネル削除確認用</h3>
   <form action="/delete/{{ channel.id }}" method="GET">
+    <label for="delete">チャンネル削除:</label>
     <input type="submit" value="削除">
   </form>
+
+  {# 編集後確認用 #}
+  <h3>チャンネル情報</h3>
+  <p>チャンネル名：{{ channel.name }}</p>
+  <p>チャンネル概要：{{ channel.abstract }}</p>
+  <a href="{{ url_for('tag_channel', tid=channel.tid) }}">{{ " ".join(tags | selectattr("id", "==", channel.tid) | map(attribute="name") | list) }}</a>
+  {# {% if tag %}
+  <a href="{{ url_for('tag_channel', tid=tag.id) }}">{{ tag.name }}</a>
+  {% endif %} #}
 
   <!-- チャンネル編集機能確認 -->
   <h3>チャンネル編集機能</h3>
@@ -25,17 +39,24 @@
     <label for="channel-title"> 新しいチャンネル名:</label>
     <input
       type="text"
-      placeholder="チャンネル名"
+      placeholder="{{ channel.name }}"
       name="channel-title"
     />
     <br>
     <label for="channel-title">新しいチャンネル概要:</label>
     <input
       type="text"
-      placeholder="チャンネルの説明"
+      placeholder="{{ channel.abstract }}"
       name="channel-description"
-    />
-    <input type="hidden" name='cid' value={{ channel.id }}><br>
+    /><br>
+    <label for="tag">タグ:</label>
+    <select name="tid" required>
+      <option value="" selected disabled>選択してください</option>
+    {% for tag in tags %}
+      <option value="{{ tag.id }}">{{ tag.name }}</option>
+    {% endfor %}
+    </select><br>
+    <input type="hidden" name='cid' value="{{ channel.id }}"><br>
     <button>変更</button>
   </form>
   <hr>
@@ -47,11 +68,10 @@
     {% for message in messages %}
     <p>{{ message.user_name }}:{{ message.message }}</p>
       <form action="/delete_message" method="POST">
-        <input type="hidden" name="message_id" value={{ message.id }}>
-        <input type="hidden" name="channel_id" value={{ channel.id }}>
+        <input type="hidden" name="message_id" value="{{ message.id }}">
+        <input type="hidden" name="channel_id" value="{{ channel.id }}">
         <input type="submit" value="削除">
       </form>
-
     {% endfor %}
   {% else %}
     <p>まだメッセージがありません</p>
@@ -62,12 +82,8 @@
   <form action="/message" method="POST">
     <label for="message">メッセージを入力してください:</label><br>
     <input type="text" name="message">
-    <input type="hidden" name="channel_id" value={{ channel.id }}>
+    <input type="hidden" name="channel_id" value="{{ channel.id }}">
     <input type="submit" value="送信">
   </form>
-
-  <!-- ログアウト -->
-  <a href="{{ url_for('logout')}}">ログアウト</a>
-
 </body>
 </html>
