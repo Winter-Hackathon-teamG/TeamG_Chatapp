@@ -174,6 +174,7 @@ def index():
         """チャンネル一覧表示
 
         データベースから全てのチャンネルを取得→channelsへ代入
+        データベースから全てのタグを取得→tagsへ代入
         チャンネル一覧画面を表示
         """
     else:
@@ -199,8 +200,8 @@ def add_channel():
 
     if チャンネル名がデータベースに存在しない場合:
         チャンネル説明文をフォームから取得→channel_descriptionへ代入
-        データベースに(ユーザーID, チャンネル名, チャンネル説明文)を追加
-        フォームからタグを取得→tidに代入
+        フォームからタグIDを取得→tidに代入
+        データベースに(ユーザーID, チャンネル名, チャンネル説明文, タグID)を追加
         チャンネル一覧表示画面へリダイレクト
     else: (チャンネル名がデータベースに存在した場合)
         エラーページを表示
@@ -238,8 +239,8 @@ def update_channel():
 
     データベースの（ユーザーID、チャンネル名、チャンネル説明文、タグID）を更新
     データベースから改めてチャンネルを取得
-    メッセージ一覧画面を表示
     データベースから改めてタグを取得
+    メッセージ一覧画面を表示
     """
 
     cid = request.form.get('cid')
@@ -250,8 +251,8 @@ def update_channel():
     dbConnect.updateChannel(uid, channel_name, channel_description, cid, tid)
     channel = dbConnect.getChannelById(cid)
     messages = dbConnect.getMessageAll(cid)
-    tag = dbConnect.getTagById(tid)
-    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid, tag=tag)
+    tags = dbConnect.getTagsAll()
+    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid, tags=tags)
 
 # メッセージ一覧画面
 @app.route('/detail/<cid>')

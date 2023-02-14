@@ -40,7 +40,7 @@
     {% for channel in channels %}
       <li>
         <a href="{{ url_for('detail', cid=channel.id)}}">{{ channel.name }}</a>
-        <a href="{{ url_for('tag_channel', tid=channel.tid) }}">{{ " ".join(tags | selectattr("id", "==", channel.tid) | map(attribute="name") | list) }}</a>
+        <a href="{{ url_for('tag_channel', tid=channel.tid) }}">{{ tags | selectattr("id", "==", channel.tid) | map(attribute="name") | list | first }}</a>
       </li>
     {% endfor %}
     </ul>

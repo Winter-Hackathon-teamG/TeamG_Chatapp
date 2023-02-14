@@ -29,24 +29,21 @@
   <p>チャンネル名：{{ channel.name }}</p>
   <p>チャンネル概要：{{ channel.abstract }}</p>
   <a href="{{ url_for('tag_channel', tid=channel.tid) }}">{{ " ".join(tags | selectattr("id", "==", channel.tid) | map(attribute="name") | list) }}</a>
-  {# {% if tag %}
-  <a href="{{ url_for('tag_channel', tid=tag.id) }}">{{ tag.name }}</a>
-  {% endif %} #}
 
   <!-- チャンネル編集機能確認 -->
   <h3>チャンネル編集機能</h3>
   <form action="/update_channel" method="POST">
-    <label for="channel-title"> 新しいチャンネル名:</label>
+    <label for="channel-title">新しいチャンネル名:</label>
     <input
       type="text"
-      placeholder="{{ channel.name }}"
+      placeholder="新しいチャンネル名"
       name="channel-title"
     />
     <br>
     <label for="channel-title">新しいチャンネル概要:</label>
     <input
       type="text"
-      placeholder="{{ channel.abstract }}"
+      placeholder="新しいチャンネル概要"
       name="channel-description"
     /><br>
     <label for="tag">タグ:</label>
@@ -57,7 +54,7 @@
     {% endfor %}
     </select><br>
     <input type="hidden" name='cid' value="{{ channel.id }}"><br>
-    <button>変更</button>
+    <input type="submit" value="編集">
   </form>
   <hr>
 

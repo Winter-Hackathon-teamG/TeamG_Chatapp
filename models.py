@@ -183,7 +183,7 @@ class dbConnect:
         conn = DB.getConnection()
         cur = conn.cursor()
         sql = "UPDATE channels SET uid=%s, name=%s, abstract=%s, tid=%s WHERE id=%s;"
-        cur.execute(sql, (uid, newChannelName, newChannelDescription, cid, tid))
+        cur.execute(sql, (uid, newChannelName, newChannelDescription, tid, cid))
         conn.commit()
         cur.close()
 
