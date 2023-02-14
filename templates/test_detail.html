@@ -28,7 +28,7 @@
   <h3>チャンネル情報</h3>
   <p>チャンネル名：{{ channel.name }}</p>
   <p>チャンネル概要：{{ channel.abstract }}</p>
-  <a href="{{ url_for('tag_channel', tid=channel.tid) }}">{{ " ".join(tags | selectattr("id", "==", channel.tid) | map(attribute="name") | list) }}</a>
+  <a href="{{ url_for('tag_channel', tid=channel.tid) }}">{{ tags | selectattr("id", "==", channel.tid) | map(attribute="name") | list | first }}</a>
 
   <!-- チャンネル編集機能確認 -->
   <h3>チャンネル編集機能</h3>
