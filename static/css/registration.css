@@ -1,3 +1,8 @@
+.registration-wrapper {
+  padding: 8% 0 0;
+  margin: auto;
+}
+
 .registration-wrapper.signup {
   background-color: aliceblue;
 }
@@ -8,8 +13,43 @@
 
 .registration-main.login-main {
   background-image: url("../img/login.jpg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 .registration-main.signup-main {
   background-image: url("../img/sign_up.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.registration-form.login {
+  text-align: right;
+}
+
+.form {
+  position: relative;
+  z-index: 1;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+}
+
+.form label {
+  display: block;
+}
+
+.form input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 60%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  font-size: 14px;
 }

@@ -6,11 +6,17 @@
   <div class="registration-wrapper login">
     <div class="registration-main login-main">
       LOGIN
-      <div class="half-circle green">
-        <form class="registration-form" method="post">
+      <div class="form">
+        <form class="registration-form login" method="post">
           <h1 class="registration-title">LOG IN</h1>
-          <input type="text" placeholder="Email" name="email" />
-          <input type="password" placeholder="Password" name="password" />
+          <div class="input-form">
+            <label for="email">メールアドレス:</label>
+            <input type="text" placeholder="Email" name="email" />
+          </div>
+          <div class="input-form">
+            <label for="email">パスワード:</label>
+            <input type="password" placeholder="Password" name="password" />
+          </div>
           <button class="green">LOG IN</button>
           {#
           {% with messages = get_flashed_messages() %}
@@ -23,9 +29,9 @@
             {% endif %}
           {% endwith %}
           #}
-          {# <a class="switch-register-mode" href="{{ url_for('signup') }}"> #}
+          <a class="switch-register-mode" href="{{ url_for('signup') }}">
             Not registered yet?
-          {# </a> #}
+          </a>
         </form>
       </div>
     </div>
