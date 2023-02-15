@@ -7,36 +7,55 @@
       <title>test index</title>
   </head>
   <body>
-    <p>動作確認です</p>
+
+    <header>
+    {# ユーザー確認用 #}
+    <!-- ログアウト -->
+    <a href="{{ url_for('logout')}}">ログアウト</a>
+    {# タグ一覧画面 #}
+    <a href="{{ url_for('tags') }}">タグ一覧</a>
+    </header>
+
+    <h2>チャンネル作成確認用</h2>
     <!-- チャンネル作成機能確認用フォーム -->
     <form action="/" method="POST">
         <label for="channel-title">チャンネル名:</label>
         <input type="text" name="channel-title" placeholder="チャンネル名"><br>
         <label for="channel-description">チャンネル概要:</label>
         <input type="text" name="channel-description" placeholder="チャンネル概要"><br>
+        <label for="tag">タグ:</label>
+        <select name="tid" required>
+          <option value="" selected disabled>選択してください</option>
+        {% for tag in tags %}
+          <option value="{{ tag.id }}">{{ tag.name }}</option>
+        {% endfor %}
+        </select><br>
         <input type="submit" value="作成">
     </form>
+
     <!-- チャンネル一覧表示確認用 -->
+    <h2>チャンネル一覧確認用/タグに紐付けられたチャンネル表示確認</h2>
     <a href="{{ url_for('index')}}">チャンネル一覧表示</a>
     <ul>
     {% for channel in channels %}
       <li>
         <a href="{{ url_for('detail', cid=channel.id)}}">{{ channel.name }}</a>
+        <a href="{{ url_for('tag_channel', tid=channel.tid) }}">{{ tags | selectattr("id", "==", channel.tid) | map(attribute="name") | list | first }}</a>
       </li>
     {% endfor %}
     </ul>
-    {# タグ一覧確認用 #}
-    <a href="{{ url_for('tags')}}">タグ一覧表示</a>
-    {% for tag in tags %}
-      <li><a href="{{ url_for('tag_channel', tid=tag.id) }}">{{ tag.name }}</a></li>
-    {% endfor %}
+
     {# タグに紐づけられたチャンネル表示確認用 #}
-    <p>{{ tag_name }}</p>
+    {% if tag_name %}
+    <h3>{{ tag_name }}</h3>
+    {% endif %}
     <ul>
       {% for tag_channel in tag_channels %}
       <li><a href="{{ url_for('detail', cid=tag_channel.id)}}">{{ tag_channel.name }}</a></li>
       {% endfor %}
     </ul>
+
+    {# フラッシュメッセージ確認用 #}
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul>
@@ -46,11 +65,5 @@
         </ul>
       {% endif %}
     {% endwith %}
-
-    <!-- サインアップ画面リンク -->
-    <a href="{{ url_for('signup')}}">サインアップ画面へ</a>
-
-    <!-- ログアウト -->
-    <a href="{{ url_for('logout')}}">ログアウト</a>
   </body>
 </html>

@@ -174,11 +174,13 @@ def index():
         """チャンネル一覧表示
 
         データベースから全てのチャンネルを取得→channelsへ代入
+        データベースから全てのタグを取得→tagsへ代入
         チャンネル一覧画面を表示
         """
     else:
         channels = dbConnect.getChannelAll()
-    return render_template('test_index.html', channels=channels, uid=uid)
+        tags = dbConnect.getTagsAll()
+    return render_template('test_index.html', channels=channels, uid=uid, tags=tags)
 
 @app.route('/', methods=['POST'])
 def add_channel():
@@ -198,16 +200,19 @@ def add_channel():
 
     if チャンネル名がデータベースに存在しない場合:
         チャンネル説明文をフォームから取得→channel_descriptionへ代入
-        データベースに(ユーザーID, チャンネル名, チャンネル説明文)を追加
+        フォームからタグIDを取得→tidに代入
+        データベースに(ユーザーID, チャンネル名, チャンネル説明文, タグID)を追加
         チャンネル一覧表示画面へリダイレクト
     else: (チャンネル名がデータベースに存在した場合)
         エラーページを表示
     """
     channel_name = request.form.get('channel-title')
     channel = dbConnect.getChannelByName(channel_name)
+
     if channel == None:
         channel_description = request.form.get('channel-description')
-        dbConnect.addChannel(uid, channel_name, channel_description)
+        tid = request.form.get('tid')
+        dbConnect.addChannel(uid, channel_name, channel_description, tid)
         return redirect('/')
     else:
         error = '既に同じチャンネルが存在しています'
@@ -230,21 +235,24 @@ def update_channel():
     フォームからチャンネルIDを取得→cidに代入
     フォームからチャンネル名を取得→channel_nameに代入
     フォームからチャンネル説明文を取得→channel_descriptionに代入
+    フォームからタグIDを取得→tidに代入
 
-    データベースの（ユーザーID、チャンネル名、チャンネル説明文）を更新
+    データベースの（ユーザーID、チャンネル名、チャンネル説明文、タグID）を更新
     データベースから改めてチャンネルを取得
-    （！コメントアウト データベースから全てのメッセージを取得）
+    データベースから改めてタグを取得
     メッセージ一覧画面を表示
     """
 
     cid = request.form.get('cid')
     channel_name = request.form.get('channel-title')
     channel_description = request.form.get('channel-description')
+    tid = request.form.get('tid')
 
-    dbConnect.updateChannel(uid, channel_name, channel_description, cid)
+    dbConnect.updateChannel(uid, channel_name, channel_description, cid, tid)
     channel = dbConnect.getChannelById(cid)
     messages = dbConnect.getMessageAll(cid)
-    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid)
+    tags = dbConnect.getTagsAll()
+    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid, tags=tags)
 
 # メッセージ一覧画面
 @app.route('/detail/<cid>')
@@ -263,12 +271,14 @@ def detail(cid):
     URLよりチャンネルIDを取得→cidに代入
     データベースから該当するcidのチャンネルを取得
     データベースから該当するcidの全てのメッセージを取得
+    データベースからタグを全て取得→tagsへ代入
     メッセージ一覧画面を表示
     """
     cid = cid
     channel = dbConnect.getChannelById(cid)
     messages = dbConnect.getMessageAll(cid)
-    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid)
+    tags = dbConnect.getTagsAll()
+    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid, tags=tags)
 
 # チャンネル削除機能
 @app.route('/delete/<cid>')
@@ -393,7 +403,7 @@ def tags():
         """
     else:
         tags = dbConnect.getTagsAll()
-    return render_template('test_index.html', tags=tags, uid=uid)
+    return render_template('test_tags.html', tags=tags, uid=uid)
 
 # 選択されたタグに紐づけられたチャンネルの表示
 @app.route('/tag/<tid>')
