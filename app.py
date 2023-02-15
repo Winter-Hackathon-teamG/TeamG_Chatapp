@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, session, flash
+from flask import Flask, request, redirect, render_template, session, flash, url_for
 from models import dbConnect
 from util.DB import DB
 from util.user import User
@@ -211,8 +211,7 @@ def add_channel():
 
     if channel == None:
         channel_description = request.form.get('channel-description')
-        tid = request.form.get('tid')
-        dbConnect.addChannel(uid, channel_name, channel_description, tid)
+        dbConnect.addChannel(uid, channel_name, channel_description)
         return redirect('/')
     else:
         error = '既に同じチャンネルが存在しています'
@@ -246,9 +245,8 @@ def update_channel():
     cid = request.form.get('cid')
     channel_name = request.form.get('channel-title')
     channel_description = request.form.get('channel-description')
-    tid = request.form.get('tid')
 
-    dbConnect.updateChannel(uid, channel_name, channel_description, cid, tid)
+    dbConnect.updateChannel(uid, channel_name, channel_description, cid)
     channel = dbConnect.getChannelById(cid)
     messages = dbConnect.getMessageAll(cid)
     tags = dbConnect.getTagsAll()
