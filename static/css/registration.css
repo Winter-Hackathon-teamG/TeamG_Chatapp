@@ -5,3 +5,11 @@
 .registration-wrapper.login {
   background-color: aliceblue;
 }
+
+.registration-main.login-main {
+  background-image: url("../img/login.jpg");
+}
+
+.registration-main.signup-main {
+  background-image: url("../img/sign_up.png");
+}
