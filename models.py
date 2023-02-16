@@ -421,19 +421,6 @@ class dbConnect:
         finally:
             cur.close()
 
-    def getTagIdByName(tag_name):
-        try:
-            conn = DB.getConnection()
-            cur = conn.cursor()
-            sql = 'SELECT id FROM tags WHERE name=%s;'
-            cur.execute(sql, (tag_name))
-            tid = cur.fetchone()
-            return tid
-        except Exception as e:
-            return None
-        finally:
-            cur.close()
-
     def getTagsByChannelId(cid):
         try:
             conn = DB.getConnection()
