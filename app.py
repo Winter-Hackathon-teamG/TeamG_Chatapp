@@ -438,6 +438,38 @@ def tag_channel(tid):
         flash('まだチャンネルは登録されていません')
         return redirect('/')
 
+# タグ作成
+@app.route('/add_tag', methods=['POST'])
+def add_tag():
+    """ ユーザーID
+
+    ユーザーIDをセッションから取得してuidに代入
+    ユーザーIDが無ければログインページへリダイレクト
+    """
+    uid = session.get('uid')
+    if uid is None:
+        return redirect('/login')
+
+    """タグ追加
+
+    フォームからタグ名を取得→tag_nameへ代入
+    データベースから、入力されたタグ名と同じタグを取得→tagへ代入
+
+    if タグ名がデータベースに存在しない場合:
+        データベースにタグ名を追加
+        タグ一覧表示画面へリダイレクト
+    else: (タグ名がデータベースに存在した場合)
+        エラーページを表示
+    """
+    tag_name = request.form.get('tag_name')
+    tag = dbConnect.getTagByName(tag_name)
+
+    if tag == None:
+        dbConnect.addTag(tag_name)
+        return redirect('/tags')
+    else:
+        error = '既に同じタグが存在しています'
+        return render_template('error/error.html', error_message=error)
 
 # 404エラー処理
 @app.errorhandler(404)

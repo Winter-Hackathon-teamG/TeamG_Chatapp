@@ -20,5 +20,14 @@
   {% for tag in tags %}
     <li><a href="{{ url_for('tag_channel', tid=tag.id) }}">{{ tag.name }}</a></li>
   {% endfor %}
+
+  {# タグ追加フォーム #}
+  <h2>タグ追加</h2>
+  <form action="/add_tag" method="POST">
+    <label for="tag_name">タグ名:</label>
+    <input type="text" placeholder="タグの名前" name="tag_name"/><br>
+    <input type="submit" value="タグ追加">
+  </form>
+
 </body>
 </html>

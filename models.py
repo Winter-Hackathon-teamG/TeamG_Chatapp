@@ -382,3 +382,57 @@ class dbConnect:
         # 最終処理:カーソルを閉じる
         finally:
             cur.close()
+
+    # 指定されたタグ名にマッチするタグの取得
+    def getTagByName(tag_name):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入:「tagsテーブルから指定したタグ名に該当するタグを取得する」
+        execute文でsqlを実行
+        実行結果(指定したタグ名に該当するタグ1つ)を取り出す→tagに代入
+        tagを返す
+        """
+
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'SELECT * FROM tags WHERE name=%s;'
+            cur.execute(sql, (tag_name))
+            tag = cur.fetchone()
+            return tag
+
+        # 例外処理
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+
+        # 最終処理:カーソルを閉じる
+        finally:
+            cur.close()
+
+    # タグ追加(タグ名)
+    def addTag(tag_name):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入
+        execute文でsqlを実行(tagsテーブルにユーザーID, タグ名を追加)
+        commitで変更を確定
+        """
+
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'INSERT INTO tags (name) VALUES (%s);'
+            cur.execute(sql, (tag_name))
+            conn.commit()
+
+        # 例外処理
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+
+        # 最終処理:カーソルを閉じる
+        finally:
+            cur.close()
