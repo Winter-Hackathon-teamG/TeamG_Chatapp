@@ -6,18 +6,27 @@
   <div class="registration-wrapper signup">
     <div class="registration-main signup-main">
       SIGNUP
-      <div class="half-circle pink">
-        <form class="registration-form" method="post">
+      <div class="form">
+        <form class="registration-form signup" method="post">
           <h1 class="registration-title">SIGN UP</h1>
-          <input type="text" placeholder="Name" name="name" />
-          <input type="text" placeholder="Email" name="email" />
-          <input type="password" placeholder="Password" name="password1" />
-          <input
-            type="password"
-            placeholder="Password Confirmation"
-            name="password2"
-          />
-          <button class="pink">SIGN UP</button>
+          <div class="inputContainer">
+            <input type="text" class="input" placeholder="Name" name="name" />
+            <label for="" class="label">Name</label>
+          </div>
+          <div class="inputContainer">
+            <input type="text" class="input" placeholder="Email" name="email" />
+            <label for="" class="label">Email</label>
+          </div>
+          <div class="inputContainer">
+            <input type="password" class="input" placeholder="Password" name="password1" />
+            <label for="" class="label">Password</label>
+          </div>
+          <div class="inputContainer">
+            <input type="password" class="input" placeholder="Password Confirmation" name="password2" />
+            <label for="" class="label">Confirm Password</label>
+          </div>
+          <input type="submit" class="submitBtn" value="Sign up">
+          {# <button class="pink">SIGN UP</button> #}
           {#
           {% with messages = get_flashed_messages() %}
             {% if messages %}
