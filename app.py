@@ -437,8 +437,8 @@ def tag_channel(tid):
         flash('まだチャンネルは登録されていません')
         return redirect('/')
 
-@app.route('/set_tag', methods=['POST'])
-def set_tag():
+@app.route('/link_tag', methods=['POST'])
+def link_tag():
     uid = session.get('uid')
     if uid is None:
         return redirect('/login')
