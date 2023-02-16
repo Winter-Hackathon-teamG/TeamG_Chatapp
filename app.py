@@ -275,8 +275,9 @@ def detail(cid):
     cid = cid
     channel = dbConnect.getChannelById(cid)
     messages = dbConnect.getMessageAll(cid)
+    channel_tags = dbConnect.getTagsByChannelId(cid)
     tags = dbConnect.getTagsAll()
-    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid, tags=tags)
+    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid, tags=tags, channel_tags=channel_tags)
 
 # チャンネル削除機能
 @app.route('/delete/<cid>')
@@ -436,6 +437,30 @@ def tag_channel(tid):
         flash('まだチャンネルは登録されていません')
         return redirect('/')
 
+@app.route('/set_tag', methods=['POST'])
+def set_tag():
+    uid = session.get('uid')
+    if uid is None:
+        return redirect('/login')
+
+    tag_name = request.form.get('tag_name')
+    cid = request.form.get('cid')
+
+    tag = dbConnect.getTagByName(tag_name)
+
+    if tag is None:
+        dbConnect.addTag(tag_name)
+        tag = dbConnect.getTagByName(tag_name)
+        tid = tag['id']
+    else:
+        tid = tag['id']
+
+    count = dbConnect.countExistData(cid, tid)
+    if count > 0:
+        flash('既にそのタグは追加されています')
+
+    dbConnect.linkChannelTag(cid, tid)
+    return redirect(url_for('detail', cid=cid))
 
 # 404エラー処理
 @app.errorhandler(404)

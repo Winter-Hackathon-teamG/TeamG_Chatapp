@@ -60,7 +60,8 @@ CREATE TABLE tags (
 
 CREATE TABLE channels_tags (
   cid integer REFERENCES channels(id),
-  tid integer REFERENCES tags(id)
+  tid integer REFERENCES tags(id),
+  UNIQUE(cid, tid)
 );
 
 -- 動作確認用データの挿入
@@ -85,3 +86,13 @@ INSERT INTO tags (id, name) VALUES
   (10, 'スペイン'),
   (11, 'モロッコ'),
   (12, 'その他');
+
+-- 動作確認用channels_tagsへデータの登録
+INSERT INTO channels_tags (cid, tid) VALUES
+  (1, 1),
+  (1, 2),
+  (1, 3),
+  (2, 1),
+  (1, 2),
+  (1, 3),
+  (1, 4);
