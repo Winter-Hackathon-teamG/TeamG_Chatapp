@@ -9,17 +9,15 @@
       <div class="form">
         <form class="registration-form login" method="post">
           <h1 class="registration-title">LOG IN</h1>
-          <label for="email-form" class="input-form">
-            <input type="text" id="email-form" placeholder="&nbsp;" name="email" />
-            <span class="label">Email</span>
-            <span class="border"></span>
-          </label>
-          <label for="password-form" class="input-form">
-            <input type="password" id="password-form" placeholder="&nbsp;" name="password" />
-            <span class="label">Password</span>
-            <span class="border"></span>
-          </label>
-          <button class="green">LOG IN</button>
+          <div class="inputContainer">
+            <input type="text" class="input" placeholder="Email" name="email" />
+            <label for="" class="label">Email</label>
+          </div>
+          <div class="inputContainer">
+            <input type="password" class="input" placeholder="Password" name="password1" />
+            <label for="" class="label">Password</label>
+          </div>
+          <input type="submit" class="submitBtn" value="LOG IN">
           {#
           {% with messages = get_flashed_messages() %}
             {% if messages %}
