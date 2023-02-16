@@ -27,7 +27,7 @@
   background-size: cover;
 }
 
-.registration-form.login {
+/*.registration-form.login {
   text-align: right;
 }
 
@@ -52,4 +52,74 @@
   margin: 0 0 15px;
   padding: 15px;
   font-size: 14px;
+}
+*/
+
+.input-form {
+  position: relative;
+  width: 50%;
+  margin-left: auto;
+  margin-right: 0px;
+}
+
+.input-form .label {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  font-size: 16px;
+  color: #000101;
+  font-weight: 500;
+  transform-origin: 0 0;
+  transition: all 0.2s ease;
+}
+
+.input-form .border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 50%;
+  background: #07f;
+  transform: scaleX(0);
+  transform-origin: 0 0;
+  transition: all 0.15s ease;
+}
+
+.input-form input {
+  -webkit-appearance: none;
+  width: 50%;
+  border: 0;
+  font-family: inherit;
+  padding: 12px 0;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+  border-bottom: 2px solid #c8ccd4;
+  background: none;
+  border-radius: 0;
+  color: #223254;
+  transition: all 0.15s ease;
+}
+
+.input-form input:hover {
+  background: rgba(34,50,84,0.03);
+}
+
+.input-form input:not(:placeholder-shown) + span {
+  color: #5a667f;
+  transform: translateY(-26px) scale(0.75);
+}
+
+.input-form input:focus {
+  background: none;
+  outline: none;
+}
+
+.input-form input:focus + span {
+  color: #07f;
+  transform: translateY(-26px) scale(0.75);
+}
+
+.input-form input:focus + span + .border {
+  transform: scaleX(1);
 }

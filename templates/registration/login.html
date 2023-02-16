@@ -9,14 +9,16 @@
       <div class="form">
         <form class="registration-form login" method="post">
           <h1 class="registration-title">LOG IN</h1>
-          <div class="input-form">
-            <label for="email">メールアドレス:</label>
-            <input type="text" placeholder="Email" name="email" />
-          </div>
-          <div class="input-form">
-            <label for="email">パスワード:</label>
-            <input type="password" placeholder="Password" name="password" />
-          </div>
+          <label for="email-form" class="input-form">
+            <input type="text" id="email-form" placeholder="&nbsp;" name="email" />
+            <span class="label">Email</span>
+            <span class="border"></span>
+          </label>
+          <label for="password-form" class="input-form">
+            <input type="password" id="password-form" placeholder="&nbsp;" name="password" />
+            <span class="label">Password</span>
+            <span class="border"></span>
+          </label>
           <button class="green">LOG IN</button>
           {#
           {% with messages = get_flashed_messages() %}
