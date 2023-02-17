@@ -25,7 +25,7 @@
   </form>
 
   {# タグ紐付け確認用フォーム #}
-  <h2>タグ紐付け確認用</h2>
+  <h3>タグ紐付け確認用</h3>
   <form action="/link_tag" method="POST">
     <label for="tag-name">タグ名:</label>
     <input type="text" name="tag_name" placeholder="タグ名">
@@ -59,13 +59,6 @@
       placeholder="新しいチャンネル概要"
       name="channel-description"
     /><br>
-    <label for="tag">タグ:</label>
-    <select name="tid" required>
-      <option value="" selected disabled>選択してください</option>
-    {% for tag in tags %}
-      <option value="{{ tag.id }}">{{ tag.name }}</option>
-    {% endfor %}
-    </select><br>
     <input type="hidden" name='cid' value="{{ channel.id }}"><br>
     <input type="submit" value="編集">
   </form>

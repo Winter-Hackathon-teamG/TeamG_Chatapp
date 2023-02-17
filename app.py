@@ -456,11 +456,13 @@ def link_tag():
         tid = tag['id']
 
     count = dbConnect.countExistData(cid, tid)
-    if count > 0:
-        flash('既にそのタグは追加されています')
 
-    dbConnect.linkChannelTag(cid, tid)
-    return redirect(url_for('detail', cid=cid))
+    if count is not None:
+        flash('既にそのタグは追加されています')
+        return redirect(url_for('detail', cid=cid))
+    else:
+        dbConnect.linkChannelTag(cid, tid)
+        return redirect(url_for('detail', cid=cid))
 
 # 404エラー処理
 @app.errorhandler(404)
