@@ -384,7 +384,16 @@ class dbConnect:
             cur.close()
 
 
+    # 入力されたタグ名からデータを取得(タグ名)
     def getTagByName(tag_name):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入:「tagsテーブルからタグ名(name)が同じものを取得」
+        execute文でsqlを実行
+        実行結果(指定したタグ名と一致する)データを取り出す→tagに代入
+        tagを返す
+        """
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
@@ -392,36 +401,68 @@ class dbConnect:
             cur.execute(sql, (tag_name))
             tag = cur.fetchone()
             return tag
+        # 例外処理
         except Exception as e:
+            print(e + 'が発生しています')
             return None
+        # 最終処理:カーソルを閉じる
         finally:
             cur.close()
 
+    # タグ追加(タグ名)
     def addTag(tag_name):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入:tagsテーブルにタグを追加
+        execute文でsqlを実行
+        commitで変更を確定
+        """
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = 'INSERT INTO tags (name) VALUES (%s);'
             cur.execute(sql, (tag_name))
             conn.commit()
+        # 例外処理
         except Exception as e:
             return None
+        # 最終処理
         finally:
             cur.close()
 
+    # チャンネルとタグを紐付け
     def linkChannelTag(cid, tid):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入:channels_tagsテーブルにチャンネルIDとタグIDの組み合わせを登録
+        execute文でsqlを実行
+        commitで変更を確定
+        """
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = 'INSERT INTO channels_tags(cid, tid) VALUES(%s, %s);'
             cur.execute(sql, (cid, tid))
             conn.commit()
+        # 例外処理
         except Exception as e:
             return None
+        # 最終処理
         finally:
             cur.close()
 
+    # チャンネルIDからチャンネルに紐付いているタグを取得
     def getTagsByChannelId(cid):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入:チャンネルに紐付いているタグIDのタグをtagsテーブルから取得
+        execute文でsqlを実行
+        取得したデータをchannel_tagsへ代入
+        channel_tagsを返す
+        """
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
@@ -429,20 +470,33 @@ class dbConnect:
             cur.execute(sql, (cid))
             channel_tags = cur.fetchall()
             return channel_tags
+        # 例外処理
         except Exception as e:
             return None
+        # 最終処理
         finally:
             cur.close()
 
+    # 既に紐付いているチャンネルIDとタグIDの数を取得
     def countExistData(cid, tid):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入:受け取ったcidとtidと同じ組み合わせのデータをchannels_tagsテーブルから取得
+        execute文でsqlを実行
+        実行結果→countに代入
+        countを返す
+        """
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = 'SELECT COUNT(*) FROM channels_tags WHERE cid=%s AND tid=%s;'
             cur.execute(sql, (cid, tid))
-            count = cur.fetchone()[0]
+            count = cur.fetchone()
             return count
+        # 例外処理
         except Exception as e:
             return None
+        # 最終処理
         finally:
             cur.close()
