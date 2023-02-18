@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, session, flash
+from flask import Flask, request, redirect, render_template, session, flash, url_for
 from models import dbConnect
 from util.DB import DB
 from util.user import User
@@ -211,8 +211,7 @@ def add_channel():
 
     if channel == None:
         channel_description = request.form.get('channel-description')
-        tid = request.form.get('tid')
-        dbConnect.addChannel(uid, channel_name, channel_description, tid)
+        dbConnect.addChannel(uid, channel_name, channel_description)
         return redirect('/')
     else:
         error = '既に同じチャンネルが存在しています'
@@ -246,9 +245,8 @@ def update_channel():
     cid = request.form.get('cid')
     channel_name = request.form.get('channel-title')
     channel_description = request.form.get('channel-description')
-    tid = request.form.get('tid')
 
-    dbConnect.updateChannel(uid, channel_name, channel_description, cid, tid)
+    dbConnect.updateChannel(uid, channel_name, channel_description, cid)
     channel = dbConnect.getChannelById(cid)
     messages = dbConnect.getMessageAll(cid)
     tags = dbConnect.getTagsAll()
@@ -277,8 +275,9 @@ def detail(cid):
     cid = cid
     channel = dbConnect.getChannelById(cid)
     messages = dbConnect.getMessageAll(cid)
+    channel_tags = dbConnect.getTagsByChannelId(cid)
     tags = dbConnect.getTagsAll()
-    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid, tags=tags)
+    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid, tags=tags, channel_tags=channel_tags)
 
 # チャンネル削除機能
 @app.route('/delete/<cid>')
@@ -438,6 +437,32 @@ def tag_channel(tid):
         flash('まだチャンネルは登録されていません')
         return redirect('/')
 
+@app.route('/link_tag', methods=['POST'])
+def link_tag():
+    uid = session.get('uid')
+    if uid is None:
+        return redirect('/login')
+
+    tag_name = request.form.get('tag_name')
+    cid = request.form.get('cid')
+
+    tag = dbConnect.getTagByName(tag_name)
+
+    if tag is None:
+        dbConnect.addTag(tag_name)
+        tag = dbConnect.getTagByName(tag_name)
+        tid = tag['id']
+    else:
+        tid = tag['id']
+
+    count = dbConnect.countExistData(cid, tid)
+
+    if count is not None:
+        flash('既にそのタグは追加されています')
+        return redirect(url_for('detail', cid=cid))
+    else:
+        dbConnect.linkChannelTag(cid, tid)
+        return redirect(url_for('detail', cid=cid))
 
 # 404エラー処理
 @app.errorhandler(404)

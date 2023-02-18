@@ -116,7 +116,7 @@ class dbConnect:
             cur.close()
 
     # チャンネル追加(ユーザーID, チャンネル名, チャンネル概要, タグID)
-    def addChannel(uid, newChannelName, newChannelDescription, tid):
+    def addChannel(uid, newChannelName, newChannelDescription):
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
@@ -129,8 +129,8 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = 'INSERT INTO channels (uid, name, abstract, tid) VALUES (%s, %s, %s, %s);'
-            cur.execute(sql, (uid, newChannelName, newChannelDescription, tid))
+            sql = 'INSERT INTO channels (uid, name, abstract) VALUES (%s, %s, %s);'
+            cur.execute(sql, (uid, newChannelName, newChannelDescription))
             conn.commit()
 
         # 例外処理
@@ -171,7 +171,7 @@ class dbConnect:
             cur.close()
 
     # チャンネル更新(ユーザーID, チャンネル名, チャンネル概要、タグID)
-    def updateChannel(uid, newChannelName, newChannelDescription, cid, tid):
+    def updateChannel(uid, newChannelName, newChannelDescription, cid):
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
@@ -182,8 +182,8 @@ class dbConnect:
         """
         conn = DB.getConnection()
         cur = conn.cursor()
-        sql = "UPDATE channels SET uid=%s, name=%s, abstract=%s, tid=%s WHERE id=%s;"
-        cur.execute(sql, (uid, newChannelName, newChannelDescription, tid, cid))
+        sql = "UPDATE channels SET uid=%s, name=%s, abstract=%s WHERE id=%s;"
+        cur.execute(sql, (uid, newChannelName, newChannelDescription, cid))
         conn.commit()
         cur.close()
 
@@ -380,5 +380,69 @@ class dbConnect:
             return None
 
         # 最終処理:カーソルを閉じる
+        finally:
+            cur.close()
+
+
+    def getTagByName(tag_name):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'SELECT * FROM tags WHERE name=%s;'
+            cur.execute(sql, (tag_name))
+            tag = cur.fetchone()
+            return tag
+        except Exception as e:
+            return None
+        finally:
+            cur.close()
+
+    def addTag(tag_name):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'INSERT INTO tags (name) VALUES (%s);'
+            cur.execute(sql, (tag_name))
+            conn.commit()
+        except Exception as e:
+            return None
+        finally:
+            cur.close()
+
+    def linkChannelTag(cid, tid):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'INSERT INTO channels_tags(cid, tid) VALUES(%s, %s);'
+            cur.execute(sql, (cid, tid))
+            conn.commit()
+        except Exception as e:
+            return None
+        finally:
+            cur.close()
+
+    def getTagsByChannelId(cid):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'SELECT * FROM tags JOIN channels_tags ON tags.id = channels_tags.tid WHERE channels_tags.cid = %s;'
+            cur.execute(sql, (cid))
+            channel_tags = cur.fetchall()
+            return channel_tags
+        except Exception as e:
+            return None
+        finally:
+            cur.close()
+
+    def countExistData(cid, tid):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'SELECT COUNT(*) FROM channels_tags WHERE cid=%s AND tid=%s;'
+            cur.execute(sql, (cid, tid))
+            count = cur.fetchone()[0]
+            return count
+        except Exception as e:
+            return None
         finally:
             cur.close()

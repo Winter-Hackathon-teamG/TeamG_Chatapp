@@ -24,11 +24,24 @@
     <input type="submit" value="削除">
   </form>
 
+  {# タグ紐付け確認用フォーム #}
+  <h3>タグ紐付け確認用</h3>
+  <form action="/link_tag" method="POST">
+    <label for="tag-name">タグ名:</label>
+    <input type="text" name="tag_name" placeholder="タグ名">
+    <input type="hidden" name="cid" value="{{ channel.id }}">
+    <input type="submit" value="追加">
+  </form>
+
   {# 編集後確認用 #}
   <h3>チャンネル情報</h3>
   <p>チャンネル名：{{ channel.name }}</p>
   <p>チャンネル概要：{{ channel.abstract }}</p>
-  <a href="{{ url_for('tag_channel', tid=channel.tid) }}">{{ tags | selectattr("id", "==", channel.tid) | map(attribute="name") | list | first }}</a>
+  {% if channel_tags %}
+    {% for channel_tag in channel_tags %}
+      <a href="{{ url_for('tag_channel', tid=channel_tag.id) }}">{{ channel_tag.name }}</a>
+    {% endfor %}
+  {% endif %}
 
   <!-- チャンネル編集機能確認 -->
   <h3>チャンネル編集機能</h3>
@@ -46,13 +59,6 @@
       placeholder="新しいチャンネル概要"
       name="channel-description"
     /><br>
-    <label for="tag">タグ:</label>
-    <select name="tid" required>
-      <option value="" selected disabled>選択してください</option>
-    {% for tag in tags %}
-      <option value="{{ tag.id }}">{{ tag.name }}</option>
-    {% endfor %}
-    </select><br>
     <input type="hidden" name='cid' value="{{ channel.id }}"><br>
     <input type="submit" value="編集">
   </form>
