@@ -1,5 +1,5 @@
 .modal {
-  /* display:inline;はモーダル確認時使用 */
+  /* display:inline;はJS実装前にモーダル画面を確認するため */
   /* display: inline; */
   display: none;
   position: fixed;
