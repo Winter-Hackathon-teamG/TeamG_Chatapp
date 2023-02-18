@@ -17,13 +17,7 @@
         <ul class="pagination"></ul>
         <p id="next">></p>
       </div>
-      <ul class="channel-box">
-        {% for channel in channels %}
-        <li>
-          <a href="{{ url_for('detail', cid=channel.id)}}">{{ channel.name }}</a>
-        </li>
-        {% endfor %}
-      </ul>
+      <ul class="channel-box"></ul>
       {% include 'modal/add-channel.html' %}
       {% include 'modal/delete-confirmation.html' %}
     </div>
