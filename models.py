@@ -426,6 +426,7 @@ class dbConnect:
             conn.commit()
         # 例外処理
         except Exception as e:
+            print(e + 'が発生しています')
             return None
         # 最終処理
         finally:
@@ -448,6 +449,7 @@ class dbConnect:
             conn.commit()
         # 例外処理
         except Exception as e:
+            print(e + 'が発生しています')
             return None
         # 最終処理
         finally:
@@ -472,6 +474,7 @@ class dbConnect:
             return channel_tags
         # 例外処理
         except Exception as e:
+            print(e + 'が発生しています')
             return None
         # 最終処理
         finally:
@@ -496,6 +499,7 @@ class dbConnect:
             return count
         # 例外処理
         except Exception as e:
+            print(e + 'が発生しています')
             return None
         # 最終処理
         finally:
