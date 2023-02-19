@@ -33,6 +33,17 @@
     <input type="submit" value="追加">
   </form>
 
+  {# フラッシュメッセージ確認用 #}
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
   {# 編集後確認用 #}
   <h3>チャンネル情報</h3>
   <p>チャンネル名：{{ channel.name }}</p>

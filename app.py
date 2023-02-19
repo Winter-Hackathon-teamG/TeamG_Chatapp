@@ -437,11 +437,41 @@ def tag_channel(tid):
         flash('まだチャンネルは登録されていません')
         return redirect('/')
 
+# タグ追加&紐付け
 @app.route('/link_tag', methods=['POST'])
 def link_tag():
+    """ ユーザーID
+
+    ユーザーIDをセッションから取得してuidに代入
+    ユーザーIDが無ければログインページへリダイレクト
+    """
     uid = session.get('uid')
     if uid is None:
         return redirect('/login')
+
+    """
+    フォームからタグ名を取得→tag_nameへ代入
+    フォームからチャンネルIDを取得→cidへ代入
+
+    データベースから入力されたタグ名と同じデータを取り出す→tagへ代入
+
+    if タグ存在しない場合:
+        データベースにタグを追加
+        追加したタグのデータを取得→tagへ代入
+        タグのIDを取得→tidへ代入
+    else: (タグが存在している場合)
+        タグのIDを取得→tidへ代入
+
+    データベースからチャンネルとタグが既に紐付いていないかを検索→countへ代入
+
+    if チャンネルとタグが既に紐付いている場合:
+    * COUNT(*)で全ての行をカウントしている
+        「追加済みです」と表示
+        detail画面へリダイレクト
+    else: (チャンネルとタグが紐付いていない場合)
+        チャンネルとタグを紐付ける
+        detail画面へリダイレクト
+    """
 
     tag_name = request.form.get('tag_name')
     cid = request.form.get('cid')
@@ -457,8 +487,8 @@ def link_tag():
 
     count = dbConnect.countExistData(cid, tid)
 
-    if count is not None:
-        flash('既にそのタグは追加されています')
+    if count and count['COUNT(*)'] > 0:
+        flash('追加済みです')
         return redirect(url_for('detail', cid=cid))
     else:
         dbConnect.linkChannelTag(cid, tid)
