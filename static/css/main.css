@@ -128,11 +128,13 @@ img {
   font-weight: bold;
   color: #01B4EE;
   cursor: pointer;
+  background-color: aliceblue;
 }
 
 .pagination {
   padding-left: 0;
   color: black;
+  background-color: aliceblue;
 }
 
 .pagination li.colored {

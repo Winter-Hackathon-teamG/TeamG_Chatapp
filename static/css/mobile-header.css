@@ -33,7 +33,11 @@
   height: 100%;
   width: 100%;
   overflow: auto;
-  background-color: black;
+  background-color: aliceblue;
+}
+
+#mobile-header:hover {
+  color: gray;
 }
 
 #mobile-header ul {
@@ -55,7 +59,7 @@
 }
 
 #mobile-header li a:hover {
-  color: aliceblue;
+  color: gray;
 }
 
 @media screen and (max-width: 639px) {
