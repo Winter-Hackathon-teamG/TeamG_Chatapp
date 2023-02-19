@@ -59,7 +59,7 @@ const pagination = () => {
   show(page, STEP);
 
   //前ページ遷移
-  document.getElementById("prev").addEventListener("click", () => {
+  document.querySelector("#prev").addEventListener("click", () => {
     if (page <= 1) return;
     page = page - 1;
     show(page, STEP);
@@ -67,7 +67,7 @@ const pagination = () => {
   });
 
   //次ページ遷移
-  document.getElementById("next").addEventListener("click", () => {
+  document.querySelector("#next").addEventListener("click", () => {
     if (page >= channels.length / STEP) return;
     page = page + 1;
     show(page, STEP);
