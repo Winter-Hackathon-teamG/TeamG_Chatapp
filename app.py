@@ -179,7 +179,7 @@ def index():
         """
     else:
         channels = dbConnect.getChannelAll()
-        tags = dbConnect.getTagsAll()
+        tags = dbConnect.getTagsAllJoin()
     return render_template('test_index.html', channels=channels, uid=uid, tags=tags)
 
 @app.route('/', methods=['POST'])
@@ -234,12 +234,9 @@ def update_channel():
     フォームからチャンネルIDを取得→cidに代入
     フォームからチャンネル名を取得→channel_nameに代入
     フォームからチャンネル説明文を取得→channel_descriptionに代入
-    フォームからタグIDを取得→tidに代入
 
-    データベースの（ユーザーID、チャンネル名、チャンネル説明文、タグID）を更新
-    データベースから改めてチャンネルを取得
-    データベースから改めてタグを取得
-    メッセージ一覧画面を表示
+    データベースの（ユーザーID、チャンネル名、チャンネル説明文、チャンネルID）を更新
+    メッセージ一覧画面へリダイレクト
     """
 
     cid = request.form.get('cid')
@@ -247,10 +244,7 @@ def update_channel():
     channel_description = request.form.get('channel-description')
 
     dbConnect.updateChannel(uid, channel_name, channel_description, cid)
-    channel = dbConnect.getChannelById(cid)
-    messages = dbConnect.getMessageAll(cid)
-    tags = dbConnect.getTagsAll()
-    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid, tags=tags)
+    return redirect(url_for('detail', cid=cid))
 
 # メッセージ一覧画面
 @app.route('/detail/<cid>')
@@ -269,15 +263,14 @@ def detail(cid):
     URLよりチャンネルIDを取得→cidに代入
     データベースから該当するcidのチャンネルを取得
     データベースから該当するcidの全てのメッセージを取得
-    データベースからタグを全て取得→tagsへ代入
+    データベースから該当するcidに紐づいたタグを全て取得→channel_tagsへ代入
     メッセージ一覧画面を表示
     """
     cid = cid
     channel = dbConnect.getChannelById(cid)
     messages = dbConnect.getMessageAll(cid)
     channel_tags = dbConnect.getTagsByChannelId(cid)
-    tags = dbConnect.getTagsAll()
-    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid, tags=tags, channel_tags=channel_tags)
+    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid, channel_tags=channel_tags)
 
 # チャンネル削除機能
 @app.route('/delete/<cid>')
@@ -304,18 +297,16 @@ def delete_channel(cid):
         channel = dbConnect.getChannelById(cid)
         if channel['uid'] != uid:
             flash('チャンネルは作成者のみ削除可能です')
-            return redirect('/')
+            return redirect(url_for('index'))
 
             """ チャンネル削除処理
                 else:(ユーザーIDが同じ場合)
                     データベースから該当するcidのチャンネルを削除
-                    データベースから登録されている全てのチャンネルを取得
-                    チャンネル一覧画面を表示
+                    チャンネル一覧画面へリダイレクト
             """
         else:
             dbConnect.deleteChannel(cid)
-            channels = dbConnect.getChannelAll()
-            return render_template('test_index.html', channels=channels, uid=uid)
+            return redirect(url_for('index'))
 
 # メッセージ作成機能
 @app.route('/message', methods=['POST'])
@@ -336,10 +327,7 @@ def add_message():
     if メッセージが存在する場合:
         データベースに(ユーザーID, チャンネルID, メッセージ)を追加
 
-    同チャンネルのチャンネルIDをDBから取得→channelに代入
-    同チャンネルのメッセージをDBから全て取得→messagesに代入
-
-    メッセージ一覧画面を表示(message, channel, uid)
+    メッセージ一覧画面へリダイレクト
     """
     message = request.form.get('message')
     channel_id = request.form.get('channel_id')
@@ -347,10 +335,7 @@ def add_message():
     if message:
         dbConnect.createMessage(uid, channel_id, message)
 
-    channel = dbConnect.getChannelById(channel_id)
-    messages = dbConnect.getMessageAll(channel_id)
-
-    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid)
+    return redirect(url_for('detail', cid=channel_id))
 
 # メッセージ削除機能
 @app.route('/delete_message', methods=['POST'])
@@ -378,10 +363,7 @@ def delete_message():
     if message_id:
         dbConnect.deleteMessage(message_id)
 
-    channel = dbConnect.getChannelById(cid)
-    messages = dbConnect.getMessageAll(cid)
-
-    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid)
+    return redirect(url_for('detail', cid=cid))
 
 # タグ一覧表示
 @app.route('/tags')
@@ -426,16 +408,17 @@ def tag_channel(tid):
         タグに紐づけられたチャンネル一覧を表示
     else (存在しない場合)
         「まだチャンネルは登録されていません」と表示
+         ※redirectでindexに遷移すると、tag_nameの表示が消えてしまうためrender_templateで記述
     """
     tag = dbConnect.getTagById(tid)
     tag_name = tag['name']
-    tag_channels = dbConnect.getChannelsByTag(tid)
+    tag_channels = dbConnect.getChannelsByTagId(tid)
 
     if tag_channels:
         return render_template('test_index.html', tag_name=tag_name, tag_channels=tag_channels, uid=uid)
     else:
         flash('まだチャンネルは登録されていません')
-        return redirect('/')
+        return render_template('test_index.html', tag_name=tag_name, uid=uid)
 
 # タグ追加&紐付け
 @app.route('/link_tag', methods=['POST'])
