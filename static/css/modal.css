@@ -1,6 +1,4 @@
 .modal {
-  /* display:inline;はJS実装前にモーダル画面を確認するため */
-  /* display: inline; */
   display: none;
   position: fixed;
   z-index: 1;
@@ -40,9 +38,9 @@
   background: #AFCD83;
   padding: 3px 15px 3px 32px;
   border-radius: 20px 20px 0 0;
-  color: black;
   display: flex;
   justify-content: center;
+  position: relative;
 }
 
 .modal-header h5 span {
@@ -51,9 +49,10 @@
 
 .modal-header > .modalClose {
   font-size: 2rem;
-  position: relative;
+  position: absolute;
+  right: 10px;
   top: 0;
-  left: 250px;
+  /* left: 250px; */
 }
 
 .modalClose:hover {
@@ -68,6 +67,10 @@
   color: black;
 }
 
+::placeholder {
+  color: gray;
+}
+
 .channel-form-input {
   width: 70%;
   background-color: transparent;
@@ -76,6 +79,9 @@
   margin-top: 8px;
   margin-bottom: 20px;
   padding-bottom: 10px;
+}
+
+.channel-form-input::placeholder {
   color: gray;
 }
 
