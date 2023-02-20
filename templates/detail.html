@@ -13,19 +13,27 @@
     <div class="chat-box">
       <div id="chat-header">
         {# もしuidとチャンネル作成者が同じならタイトル、説明を編集可能にする #}
-        {# バックエンド側の処理が完了するまで一旦コメントアウト
+        {# バックエンド側の処理が完了するまで一旦コメントアウト #}
         <p id="chatroom-name">{{ channel.name }}</p>
         {% if channel.abstract is not none %}
           <p id="chatroom-description">{{ channel.abstract }}</p>
         {% endif %}
         {% if uid == channel.uid %}
-          <button id='channel-update' class="basic-btn smaller-btn">編集</button>
+          <button id='channel-update' class="channel-btn ch-update-btn">編集</button>
           {% include 'modal/update-channel.html' %}
+          <button id='channel-delete' class="channel-btn ch-delete-btn">削除</button>
+          {% include 'modal/delete-confirmation.html' %}
+          <div class="channnel-tag">
+            <form class="tag-form" action="#" method="post">
+              <label for="" class="tag-label">登録タグ名:</label>
+              <input type="text" class="tag-input" placeholder="タグ名入力" name="tag" />
+              <input type="submit" class="ch-tag-btn" value="タグ登録">
+            </form>
+          </div>
         {% endif %}
-        #}
       </div>
       <div id="message-area">
-        {# バックエンド側の処理が完了するまで一旦コメントアウト
+        {# バックエンド側の処理が完了するまで一旦コメントアウト #}
         {% if messages|length > 0 %}
           {% for message in messages %}
             {% if message.uid == uid %}
@@ -52,7 +60,6 @@
         {% else %}
           <div><p>まだメッセージがありません</p></div>
         {% endif %}
-        #}
       </div>
       <div class="typing-box-wrapper">
         <form class="typing-box" action="/message" method="POST">
