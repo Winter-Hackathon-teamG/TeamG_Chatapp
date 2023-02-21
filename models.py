@@ -531,3 +531,28 @@ class dbConnect:
         # 最終処理
         finally:
             cur.close()
+
+    # チャンネルとタグの紐付けを削除(チャンネルID, タグID)
+    def deleteTagLink(cid, tid):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        channels_tagsテーブルから渡ってきたチャンネルIDとタグIDと同じ組み合わせを削除
+        execute文でsqlを実行
+        commitで変更を確定
+        """
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'DELETE FROM channels_tags WHERE cid=%s AND tid=%s;'
+            cur.execute(sql,(cid, tid))
+            conn.commit()
+
+        # 例外処理
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+
+        # 最終処理：カーソルを閉じる
+        finally:
+            cur.close()
