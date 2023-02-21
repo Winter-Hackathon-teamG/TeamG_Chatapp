@@ -179,7 +179,7 @@ def index():
         """
     else:
         channels = dbConnect.getChannelAll()
-        tags = dbConnect.getTagsAllJoin()
+        tags = dbConnect.getTagsAllByTagId()
     return render_template('test_index.html', channels=channels, uid=uid, tags=tags)
 
 @app.route('/', methods=['POST'])
@@ -297,7 +297,7 @@ def delete_channel(cid):
         channel = dbConnect.getChannelById(cid)
         if channel['uid'] != uid:
             flash('チャンネルは作成者のみ削除可能です')
-            return redirect(url_for('index'))
+            return redirect('/')
 
             """ チャンネル削除処理
                 else:(ユーザーIDが同じ場合)
@@ -306,7 +306,7 @@ def delete_channel(cid):
             """
         else:
             dbConnect.deleteChannel(cid)
-            return redirect(url_for('index'))
+            return redirect('/')
 
 # メッセージ作成機能
 @app.route('/message', methods=['POST'])

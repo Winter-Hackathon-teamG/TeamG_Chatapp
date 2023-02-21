@@ -327,7 +327,7 @@ class dbConnect:
             cur.close()
 
     # タグ一覧取得機能(channels_tagsテーブルと結合させたバージョン)
-    def getTagsAllJoin():
+    def getTagsAllByTagId():
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
