@@ -31,9 +31,14 @@
     <a href="{{ url_for('index')}}">チャンネル一覧表示</a>
     <ul>
     {% for channel in channels %}
-      <li>
-        <a href="{{ url_for('detail', cid=channel.id)}}">{{ channel.name }}</a>
-      </li>
+     <li>
+      <a href="{{ url_for('detail', cid=channel.id)}}">{{ channel.name }}</a>
+      <p>
+        {% for tag in tags | selectattr("cid", "==", channel.id) %}
+          <a href="{{ url_for('tag_channel', tid=tag.id) }}">{{ tag.name }}</a>
+        {% endfor %}
+      </p>
+     </li>
     {% endfor %}
     </ul>
 
