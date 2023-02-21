@@ -311,7 +311,6 @@ class dbConnect:
         実行結果を全て取り出し変数tagsに代入
         tagsを返す
         """
-
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
@@ -319,33 +318,32 @@ class dbConnect:
             cur.execute(sql)
             tags = cur.fetchall()
             return tags
-
         # 例外処理
         except Exception as e:
             print(e + 'が発生しています')
             return None
-
         # 最終処理:カーソルを閉じる
         finally:
             cur.close()
 
-    # タグに紐づけられたチャンネルの取得
-    def getChannelsByTag(tid):
+    # タグ一覧取得機能(channels_tagsテーブルと結合させたバージョン)
+    def getTagsAllByTagId():
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
-        sqlにSQL文を代入:「channelsテーブルから指定したtidに該当するチャンネルを取得する」
+        sqlにSQL文を代入:「タグIDをもとにtagsテーブルとchannels_tagsテーブルを結合させて全カラムの値を取得する」
         execute文でsqlを実行
-        実行結果を全て取り出す→tag_channelsに代入
-        tag_channelsを返す
+        実行結果を全て取り出し変数tagsに代入
+        tagsを返す
         """
+
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = 'SELECT * FROM channels WHERE tid=%s;'
-            cur.execute(sql, (tid))
-            tag_channels = cur.fetchall()
-            return tag_channels
+            sql = 'SELECT * FROM tags join channels_tags on tags.id=channels_tags.tid;'
+            cur.execute(sql)
+            tags_join = cur.fetchall()
+            return tags_join
 
         # 例外処理
         except Exception as e:
@@ -356,7 +354,7 @@ class dbConnect:
         finally:
             cur.close()
 
-    # 指定されたタグidにマッチするタグの取得
+    # 指定されたタグIDに一致するタグの取得
     def getTagById(tid):
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
@@ -364,7 +362,7 @@ class dbConnect:
         sqlにSQL文を代入:「tagsテーブルから指定したtidに該当するタグを取得する」
         execute文でsqlを実行
         実行結果(指定したtidに該当するタグ1つ)を取り出す→tagに代入
-        tagを返す
+-       tagを返す
         """
         try:
             conn = DB.getConnection()
@@ -373,6 +371,35 @@ class dbConnect:
             cur.execute(sql, (tid))
             tag = cur.fetchone()
             return tag
+
+        # 例外処理
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+
+        # 最終処理:カーソルを閉じる
+        finally:
+            cur.close()
+
+    # タグIDからタグに紐づいているチャンネルの取得
+    def getChannelsByTagId(tid):
+        """
+        MySQLにDBクラスで定義した接続用メソッドを使用して接続
+        カーソルを作成→curへ代入
+        sqlにSQL文を代入:
+-      「チャンネルIDをもとにchannels_tagsテーブルとchannelsテーブルを結合させて、
+-       指定したタグIDに一致する行を全て取得する」
+        execute文でsqlを実行
+        実行結果(指定したタグIDに一致するチャンネル全て)を取り出す→tag_channelsに代入
+        tagを返す
+        """
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = 'SELECT * FROM channels_tags JOIN channels ON channels_tags.cid=channels.id WHERE channels_tags.tid=%s;'
+            cur.execute(sql, (tid))
+            tag_channels = cur.fetchall()
+            return tag_channels
 
         # 例外処理
         except Exception as e:
