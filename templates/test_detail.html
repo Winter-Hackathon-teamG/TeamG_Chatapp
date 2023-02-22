@@ -48,9 +48,17 @@
   <h3>チャンネル情報</h3>
   <p>チャンネル名：{{ channel.name }}</p>
   <p>チャンネル概要：{{ channel.abstract }}</p>
+
+  {# タグ確認用 #}
   {% if channel_tags %}
     {% for channel_tag in channel_tags %}
+      {% set cid = channel.id %}
       <a href="{{ url_for('tag_channel', tid=channel_tag.id) }}">{{ channel_tag.name }}</a>
+      <form action="/delete_tag_link" method="POST">
+        <input type="hidden" name="cid" value="{{ cid }}">
+        <input type="hidden" name="tid" value="{{ channel_tag.id }}">
+        <button type="submit">X</button>
+      </form>
     {% endfor %}
   {% endif %}
 

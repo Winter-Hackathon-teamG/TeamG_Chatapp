@@ -408,7 +408,7 @@ def tag_channel(tid):
         タグに紐づけられたチャンネル一覧を表示
     else (存在しない場合)
         「まだチャンネルは登録されていません」と表示
-         ※redirectでindexに遷移すると、tag_nameの表示が消えてしまうためrender_templateで記述
+        ※redirectでindexに遷移すると、tag_nameの表示が消えてしまうためrender_templateで記述
     """
     tag = dbConnect.getTagById(tid)
     tag_name = tag['name']
@@ -476,6 +476,30 @@ def link_tag():
     else:
         dbConnect.linkChannelTag(cid, tid)
         return redirect(url_for('detail', cid=cid))
+
+# タグの紐付け削除
+@app.route('/delete_tag_link', methods=['POST'])
+def delete_tag_link():
+    """ ユーザーID
+
+    ユーザーIDをセッションから取得してuidに代入
+    ユーザーIDが無ければログインページへリダイレクト
+    """
+    uid = session.get('uid')
+    if uid is None:
+        return redirect('/login')
+
+    """
+    フォームからチャンネルIDを取得→cidへ代入
+    フォームからタグIDを取得→tidへ代入
+    データベースから同じチャンネルID・タグIDの組み合わせを削除
+    チャット画面へリダイレクト
+    """
+
+    cid = request.form.get('cid')
+    tid = request.form.get('tid')
+    dbConnect.deleteTagLink(cid, tid)
+    return redirect(url_for('detail', cid=cid))
 
 # 404エラー処理
 @app.errorhandler(404)
