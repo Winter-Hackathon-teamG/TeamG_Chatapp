@@ -36,11 +36,10 @@
 }
 
 .navigation ul li:hover {
-  background-color: aliceblue;
+  background-color: antiquewhite;
 }
 
 .navigation ul li.active {
-  background-color: antiquewhite;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
 }
