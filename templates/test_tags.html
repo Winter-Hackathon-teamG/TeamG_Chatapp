@@ -15,16 +15,16 @@
   <a href="{{ url_for('index') }}">ホーム画面へ</a>
   </header>
 
-  <h2>タグ一覧確認用</h2>
-  {# タグ一覧確認用 #}
+  <h2>タグ一覧・チャンネル数表示確認用</h2>
+  {# タグ一覧・チャンネル数表示確認用 #}
   {% for tag in tags %}
   <li>
     <a href="{{ url_for('tag_channel', tid=tag.id) }}">{{ tag.name }}</a>
-    {% set countchannel = channels_tags | selectattr("tid", "==", tag.id) | list | first %}
-    {% if countchannel  %}
-    <span>({{ countchannel.count }})</span>
+    {% set count_channels_list = count_channels | selectattr("tid", "==", tag.id) | list %}
+    {% if count_channels_list %}
+      <span>({{ count_channels_list | length }})</span>
     {% else %}
-    <span>(0)</span>
+      <span>(0)</span>
     {% endif %}
   </li>
   {% endfor %}

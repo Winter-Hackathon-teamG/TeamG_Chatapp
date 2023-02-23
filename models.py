@@ -557,27 +557,28 @@ class dbConnect:
         finally:
             cur.close()
 
+    # タグに紐づいたチャンネル数の表示
     def countChannels():
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
-        channels_tagsテーブルから渡ってきたチャンネルIDとタグIDと同じ組み合わせを削除
-        execute文でsqlを実行
-        commitで変更を確定
+        channels_tagsテーブルから全てのデータを取得
+        実行結果→count_channelsに代入
+        count_channelsを返す
         """
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = 'select tid, count(*) as count from channels_tags group by tid;'
+            sql = 'SELECT * FROM channels_tags;'
             cur.execute(sql)
-            countchannels = cur.fetchall()
-            return countchannels
+            count_channels = cur.fetchall()
+            return count_channels
 
         # 例外処理
         except Exception as e:
             print(e + 'が発生しています')
             return None
 
-        # 最終処理：カーソルを閉じる
+        # 最終処理:カーソルを閉じる
         finally:
             cur.close()

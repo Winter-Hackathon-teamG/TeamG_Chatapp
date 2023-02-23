@@ -377,15 +377,16 @@ def tags():
     if uid is None:
         return redirect('/login')
 
-        """タグ一覧表示
+        """タグに紐づいたチャンネル数表示
 
         データベースから全てのタグを取得→tagsへ代入
-        タグ一覧を表示
+        データベースから全てのタグとチャンネルの組み合わせを取得→count_channelsへ代入
+        タグ一覧と各タグに紐づいたチャンネル数を表示
         """
     else:
         tags = dbConnect.getTagsAll()
-        channels_tags = dbConnect.countChannels()
-    return render_template('test_tags.html', tags=tags, uid=uid, channels_tags=channels_tags)
+        count_channels = dbConnect.countChannels()
+    return render_template('test_tags.html', tags=tags, uid=uid, count_channels=count_channels)
 
 # 選択されたタグに紐づけられたチャンネルの表示
 @app.route('/tag/<tid>')
