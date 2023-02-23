@@ -365,7 +365,7 @@ def delete_message():
 
     return redirect(url_for('detail', cid=cid))
 
-# タグ一覧表示
+# タグ一覧&タグに紐づいたチャンネル数表示
 @app.route('/tags')
 def tags():
     """ ユーザーID
@@ -377,10 +377,10 @@ def tags():
     if uid is None:
         return redirect('/login')
 
-        """タグ一覧表示
+        """タグ一覧&タグに紐づいたチャンネル数表示
 
         データベースから全てのタグを取得→tagsへ代入
-        タグ一覧を表示
+        タグ一覧画面を表示
         """
     else:
         tags = dbConnect.getTagsAll()
