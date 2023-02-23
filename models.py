@@ -320,7 +320,7 @@ class dbConnect:
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = '''
-            SELECT tags.id, name, COUNT(cid) AS count FROM tags LEFT OUTER JOIN channels_tags
+            SELECT tags.id, tags.name, COUNT(cid) AS count FROM tags LEFT OUTER JOIN channels_tags
             ON tags.id=channels_tags.tid GROUP BY tags.id;
             '''
             cur.execute(sql)

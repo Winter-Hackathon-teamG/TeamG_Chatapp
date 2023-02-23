@@ -380,12 +380,10 @@ def tags():
         """タグ一覧&タグに紐づいたチャンネル数表示
 
         データベースから全てのタグを取得→tagsへ代入
-        データベースから全てのタグとチャンネルの組み合わせを取得→count_channelsへ代入
         タグ一覧画面を表示
         """
     else:
         tags = dbConnect.getTagsAll()
-        print(tags)
     return render_template('test_tags.html', tags=tags, uid=uid)
 
 # 選択されたタグに紐づけられたチャンネルの表示
