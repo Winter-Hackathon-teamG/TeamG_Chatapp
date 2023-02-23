@@ -20,12 +20,7 @@
   {% for tag in tags %}
   <li>
     <a href="{{ url_for('tag_channel', tid=tag.id) }}">{{ tag.name }}</a>
-    {% set count_channels_list = count_channels | selectattr("tid", "==", tag.id) | list %}
-    {% if count_channels_list %}
-      <span>({{ count_channels_list | length }})</span>
-    {% else %}
-      <span>(0)</span>
-    {% endif %}
+    <span>({{ tag.count }})</span>
   </li>
   {% endfor %}
 </body>

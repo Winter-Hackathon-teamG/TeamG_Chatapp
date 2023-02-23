@@ -306,7 +306,12 @@ class dbConnect:
         """
         MySQLにDBクラスで定義した接続用メソッドを使用して接続
         カーソルを作成→curへ代入
-        sqlにSQL文を代入:「tagsテーブルの全カラムの値を取得する」
+        sqlにSQL文を代入:
+        「タグIDをもとにtagsテーブルとchannels_tagsテーブルを左外部結合させて、
+        タグIDごとにグループ化する。そして、タグID、タグ名、タグIDごとにcid列の数を集計した結果（列名はcountとする）を取得する。」
+        * 外部結合とはテーブル結合時に基準となる列を指定し、その基準となるテーブルにデータがあれば、
+        もう一方のテーブルにデータがなくても取り出す方式。今回はtagsテーブルのid列を基準とする。
+        * GROUP BY:同じ値同士のデータをグループ化する。
         execute文でsqlを実行
         実行結果を全て取り出し変数tagsに代入
         tagsを返す
@@ -314,14 +319,19 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = 'SELECT * FROM tags;'
+            sql = '''
+            SELECT tags.id, name, COUNT(cid) AS count FROM tags LEFT OUTER JOIN channels_tags
+            ON tags.id=channels_tags.tid GROUP BY tags.id;
+            '''
             cur.execute(sql)
             tags = cur.fetchall()
             return tags
+
         # 例外処理
         except Exception as e:
             print(e + 'が発生しています')
             return None
+
         # 最終処理:カーソルを閉じる
         finally:
             cur.close()
@@ -569,7 +579,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = 'SELECT * FROM channels_tags;'
+            sql = 'SELECT tid FROM channels_tags join ;'
             cur.execute(sql)
             count_channels = cur.fetchall()
             return count_channels

@@ -385,8 +385,8 @@ def tags():
         """
     else:
         tags = dbConnect.getTagsAll()
-        count_channels = dbConnect.countChannels()
-    return render_template('test_tags.html', tags=tags, uid=uid, count_channels=count_channels)
+        print(tags)
+    return render_template('test_tags.html', tags=tags, uid=uid)
 
 # 選択されたタグに紐づけられたチャンネルの表示
 @app.route('/tag/<tid>')
