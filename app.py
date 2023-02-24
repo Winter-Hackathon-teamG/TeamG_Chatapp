@@ -412,10 +412,10 @@ def tag_channel(tid):
     """
     tag = dbConnect.getTagById(tid)
     tag_name = tag['name']
-    tag_channels = dbConnect.getChannelsByTagId(tid)
+    channels = dbConnect.getChannelsByTagId(tid)
 
-    if tag_channels:
-        return render_template('index.html', tag_name=tag_name, tag_channels=tag_channels, uid=uid)
+    if channels:
+        return render_template('index.html', tag_name=tag_name, channels=channels, uid=uid)
     else:
         flash('まだチャンネルは登録されていません')
         return render_template('index.html', tag_name=tag_name, uid=uid)
