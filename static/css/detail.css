@@ -36,6 +36,23 @@
   border-radius: 8px;
 }
 
+.header-tag-list {
+  display: block;
+}
+
+.tag-list-loop {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: blue;
+  margin-right: 10px;
+}
+
+.tag-list-loop:last-of-type {
+  margin-right: 0;
+}
+
 #chatroom-name {
   font-size: larger;
 }
