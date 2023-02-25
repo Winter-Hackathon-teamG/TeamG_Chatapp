@@ -1,10 +1,15 @@
 // 親要素の取得
-const chatHeader = document.getElementById('chat-header');
+const chatHeader = document.getElementById('header-tag-list');
 
-// 子要素の数に応じた高さを計算する関数
+// タグの表示数に応じたヘッダー高さを計算する関数
 function calculateHeaderHeight() {
-  const childCount = chatHeader.childElementCount;
-  const headerHeight = 50 + (childCount * 10); // この計算式は適宜変更する
+  const tagCount = chatHeader.childElementCount; // タグの表示数取得
+  const headerWidth = chatHeader.offsetWidth; // ヘッダーの幅取得
+  const tagWidth = chatHeader.firstElementChild.offsetWidth; // タグの幅取得
+  const tagHeight = 120; // 一行あたりのタグ表示の高さを設定
+  const maxTagPerRow = Math.floor(headerWidth / tagWidth); // 各行に表示できるタグの最大数
+  const rowCount = Math.ceil(tagCount / maxTagPerRow); // タグ表示の行数
+  const headerHeight = rowCount * tagHeight; // ヘッダー高さ
   return headerHeight;
 }
 

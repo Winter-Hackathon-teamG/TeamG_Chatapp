@@ -26,21 +26,21 @@
             </form>
           </div>
         {% endif %}
-        <div class="header-tag-list">
-          {% if channel_tags %}
-            {% for channel_tag in channel_tags %}
-            <div class="tag-list-loop">
-              {% set cid = channel.id %}
-              <a href="{{ url_for('tag_channel', tid=channel_tag.id) }}">{{ channel_tag.name }}</a>
-              <form class="ch-tag-delete-btn" action="/delete_tag_link" method="POST">
-                <input type="hidden" name="cid" value="{{ cid }}">
-                <input type="hidden" name="tid" value="{{ channel_tag.id }}">
-                <button type="submit">x</button>
-              </form>
-            </div>
-            {% endfor %}
-          {% endif %}
-        </div>
+      </div>
+      <div id="header-tag-list">
+        {% if channel_tags %}
+          {% for channel_tag in channel_tags %}
+          <div class="tag-list-loop">
+            {% set cid = channel.id %}
+            <a href="{{ url_for('tag_channel', tid=channel_tag.id) }}">{{ channel_tag.name }}</a>
+            <form class="ch-tag-delete-btn" action="/delete_tag_link" method="POST">
+              <input type="hidden" name="cid" value="{{ cid }}">
+              <input type="hidden" name="tid" value="{{ channel_tag.id }}">
+              <button type="submit">x</button>
+            </form>
+          </div>
+          {% endfor %}
+        {% endif %}
       </div>
       {# チャット部分 #}
       <div id="message-area">
