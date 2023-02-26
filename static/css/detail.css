@@ -36,14 +36,30 @@
   border-radius: 8px;
 }
 
+.tag-accordion-title {
+  background-color: rgb(207, 229, 249);
+  height: 50px;
+  width: calc(100vw - 70px);
+  position: fixed;
+  top: 8vh;
+  z-index: 2;
+}
+
+.tag-accordion-title p {
+  padding-left: 15px;
+  font-size: medium;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 #header-tag-list {
   background-color: rgb(207, 229, 249);
   height: 0;
   width: calc(100vw - 70px);
   position: fixed;
-  top: 8vh;
+  top: calc(8vh + 50px);
   color: black;
-  font-weight: 600;
+  font-weight: 100;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -51,6 +67,7 @@
   padding-left: 20px;
   z-index: 2;
   box-shadow: 0px 10px 10px 0px black;
+  box-sizing: border-box;
 }
 
 .tag-list-loop {
@@ -58,13 +75,41 @@
   align-items: center;
   padding: 2px;
   border-radius: 10px;
-  background-color: blue;
-  margin-right: 5px;
-  flex-basis: calc(30% - 20px);
+  background-color: rgb(207, 229, 249);
+  margin-right: 0;
+  /*flex-basis: calc(30% - 20px);*/
 }
 
 .tag-list-loop:last-of-type {
   margin-right: 0;
+}
+
+.ch-tag-delete-btn button {
+  color: red;
+  font-weight: 600;
+}
+
+.tag-delete-btn {
+  width: 3px;
+  height: 3px;
+  border: 1px solid #333;
+  border-radius: 0;
+  padding: 8px;
+  background-color: red;
+}
+
+.tag-delete-btn::before, .tag-delete-btn::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 2%;
+  height: 2px;
+  background-color: white;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.tag-delete-btn::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 #chatroom-name {
@@ -95,7 +140,7 @@
 #message-area {
   min-height: 100vh;
   width: 100%;
-  padding-top: calc(8vh + 10px);
+  padding-top: calc(8vh + 60px);
   padding-right: 20px;
   padding-bottom: calc(20vh + 10px);
   padding-left: 20px;

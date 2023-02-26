@@ -27,6 +27,9 @@
           </div>
         {% endif %}
       </div>
+      <div class="tag-accordion-title">
+        <p>登録タグ一覧</p>
+      </div>
       <div id="header-tag-list">
         {% if channel_tags %}
           {% for channel_tag in channel_tags %}
@@ -36,7 +39,8 @@
             <form class="ch-tag-delete-btn" action="/delete_tag_link" method="POST">
               <input type="hidden" name="cid" value="{{ cid }}">
               <input type="hidden" name="tid" value="{{ channel_tag.id }}">
-              <button type="submit">x</button>
+              {# <button type="submit">x</button> #}
+              <button type="submit" class="tag-delete-btn"></button>
             </form>
           </div>
           {% endfor %}
