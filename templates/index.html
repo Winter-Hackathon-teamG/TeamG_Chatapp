@@ -9,6 +9,9 @@
       <div class="channel-title">
         <h1>チャンネル一覧</h1>
       </div>
+      <div class="channel-all">
+        <a href="{{ url_for('index') }}">全チャンネル表示</a>
+      </div>
       <div class="channel-add">
         <button id="add-channel-btn">チャンネル追加</button>
       </div>
@@ -25,7 +28,8 @@
   {% endblock %}
   {% block script %}
     <script type="text/javascript">
-      const channels = JSON.parse('{{ channels|tojson }}')
+      const channels = JSON.parse('{{ channels|tojson }}');
+      const tags = JSON.parse('{{ tags|tojson }}');
       const uid = JSON.parse('{{ uid|tojson }}');
     </script>
     <script
