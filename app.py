@@ -417,8 +417,9 @@ def tag_channel(tid):
     if channels:
         return render_template('index.html', tag_name=tag_name, channels=channels, uid=uid)
     else:
-        flash('まだチャンネルは登録されていません')
-        return render_template('index.html', tag_name=tag_name, uid=uid)
+        flash(tag_name + 'のタグにチャンネルは登録されていません')
+        return redirect('/tags')
+
 
 # タグ追加&紐付け
 @app.route('/link_tag', methods=['POST'])
