@@ -42,30 +42,7 @@ window.addEventListener('resize', function() {
   }
 });
 
-// タグ一覧のアコーディオンメニュー化
-//const accordionItems = document.querySelectorAll(".chat-box");
-//accordionItems.forEach((item) => {
-  //const header = item.querySelector(".tag-accordion-title");
-  //header.addEventListener("click", () => {
-    //item.classList.toggle("active");
-  //});
-//});
-
 /*
-// タグ一覧のアコーディオンメニュー化
-document.addEventListener('DOMContentLoaded', function() {
-  var title = document.querySelector('.tag-accordion-title');
-  var list = document.getElementById('header-tag-list');
-  title.addEventListener('click', function() {
-    if (list.style.display === 'none') {
-      list.style.display = 'block';
-    } else {
-      list.style.display = 'none';
-    }
-  });
-});
-*/
-
 // タグ一覧のアコーディオンメニュー化
 document.addEventListener('DOMContentLoaded', function() {
   const list = document.getElementById('header-tag-list');
@@ -73,31 +50,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const title = document.querySelector('.tag-accordion-title');
   title.addEventListener('click', function() {
     if (list.style.display === 'none') {
-      //list.style.display = 'block';
       showHeader();
     } else {
-      //list.style.display = 'none';
       hideHeader();
-    }
-  });
-});
-
-/*
-//タグ一覧のアコーディオンメニュー化
-document.addEventListener('DOMContentLoaded', function() {
-  var list = document.getElementById('header-tag-list');
-  list.style.display = 'none'; // 初期状態で非表示にする
-  var title = document.querySelector('.tag-accordion-title');
-  title.addEventListener('click', function() {
-    if (list.style.display === 'none') {
-      // アコーディオンメニューを開くときに、flex-basisを再設定する
-      var items = list.querySelectorAll('.tag-list-loop');
-      for (var i = 0; i < items.length; i++) {
-        items[i].style.flexBasis = 'calc(30% - 20px)';
-      }
-      list.style.display = 'block';
-    } else {
-      list.style.display = 'none';
     }
   });
 });
