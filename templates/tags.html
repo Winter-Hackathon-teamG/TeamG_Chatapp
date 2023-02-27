@@ -9,6 +9,16 @@
     <div class="tag-title">
       <h1>タグ一覧</h1>
     </div>
+      {# フラッシュメッセージ確認用 #}
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul class="flashes">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
     <ul class="tag-box">
       {% for tag in tags %}
       <li>

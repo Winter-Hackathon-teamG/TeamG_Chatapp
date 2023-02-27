@@ -20,7 +20,7 @@ def signup():
 
     ユーザー登録画面を表示
     """
-    return render_template('registration/test_signup.html')
+    return render_template('registration/signup.html')
 
 # ユーザー登録画面（メソッド：POST）
 @app.route('/signup', methods=['POST'])
@@ -103,7 +103,7 @@ def login():
 
     ログイン画面を表示
     """
-    return render_template('registration/test_login.html')
+    return render_template('registration/login.html')
 
 # ログイン画面(メソッド:POST)
 @app.route('/login', methods=['POST'])
@@ -180,7 +180,7 @@ def index():
     else:
         channels = dbConnect.getChannelAll()
         tags = dbConnect.getTagsAllByTagId()
-    return render_template('test_index.html', channels=channels, uid=uid, tags=tags)
+    return render_template('index.html', channels=channels, uid=uid, tags=tags)
 
 @app.route('/', methods=['POST'])
 def add_channel():
@@ -270,7 +270,7 @@ def detail(cid):
     channel = dbConnect.getChannelById(cid)
     messages = dbConnect.getMessageAll(cid)
     channel_tags = dbConnect.getTagsByChannelId(cid)
-    return render_template('test_detail.html', messages=messages, channel=channel, uid=uid, channel_tags=channel_tags)
+    return render_template('detail.html', messages=messages, channel=channel, uid=uid, channel_tags=channel_tags)
 
 # チャンネル削除機能
 @app.route('/delete/<cid>')
@@ -365,7 +365,7 @@ def delete_message():
 
     return redirect(url_for('detail', cid=cid))
 
-# タグ一覧表示
+# タグ一覧&タグに紐づいたチャンネル数表示
 @app.route('/tags')
 def tags():
     """ ユーザーID
@@ -377,14 +377,14 @@ def tags():
     if uid is None:
         return redirect('/login')
 
-        """タグ一覧表示
+        """タグ一覧&タグに紐づいたチャンネル数表示
 
         データベースから全てのタグを取得→tagsへ代入
-        タグ一覧を表示
+        タグ一覧画面を表示
         """
     else:
         tags = dbConnect.getTagsAll()
-    return render_template('test_tags.html', tags=tags, uid=uid)
+    return render_template('tags.html', tags=tags, uid=uid)
 
 # 選択されたタグに紐づけられたチャンネルの表示
 @app.route('/tag/<tid>')
@@ -412,13 +412,14 @@ def tag_channel(tid):
     """
     tag = dbConnect.getTagById(tid)
     tag_name = tag['name']
-    tag_channels = dbConnect.getChannelsByTagId(tid)
+    channels = dbConnect.getChannelsByTagId(tid)
 
-    if tag_channels:
-        return render_template('test_index.html', tag_name=tag_name, tag_channels=tag_channels, uid=uid)
+    if channels:
+        return render_template('index.html', tag_name=tag_name, channels=channels, uid=uid)
     else:
-        flash('まだチャンネルは登録されていません')
-        return render_template('test_index.html', tag_name=tag_name, uid=uid)
+        flash(tag_name + 'のタグにチャンネルは登録されていません')
+        return redirect('/tags')
+
 
 # タグ追加&紐付け
 @app.route('/link_tag', methods=['POST'])
