@@ -8,7 +8,12 @@
       <p>削除ボタンを押すとチャンネルが消えます</p>
       <p>本当によろしいですか？</p>
       <a id="delete-confirm-link">
-        <button id="delete-channel-confirmation-btn">削除</button>
+        {#
+        <form action="/delete/{{ channel.id }}" method="GET">
+          <input type="submit" value="削除">
+        </form>
+        #}
+        {# <button id="delete-channel-confirmation-btn">削除</button> #}
       </a>
     </div>
   </div>
