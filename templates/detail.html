@@ -36,12 +36,13 @@
           <div class="tag-list-loop">
             {% set cid = channel.id %}
             <a href="{{ url_for('tag_channel', tid=channel_tag.id) }}">{{ channel_tag.name }}</a>
-            <form class="ch-tag-delete-btn" action="/delete_tag_link" method="POST">
-              <input type="hidden" name="cid" value="{{ cid }}">
-              <input type="hidden" name="tid" value="{{ channel_tag.id }}">
-              {# <button type="submit">x</button> #}
-              <button type="submit" class="tag-delete-btn"></button>
-            </form>
+            {% if uid == channel.uid %}
+              <form class="ch-tag-delete-btn" action="/delete_tag_link" method="POST">
+                <input type="hidden" name="cid" value="{{ cid }}">
+                <input type="hidden" name="tid" value="{{ channel_tag.id }}">
+                <button type="submit" class="tag-delete-btn"></button>
+              </form>
+            {% endif %}
           </div>
           {% endfor %}
         {% endif %}
