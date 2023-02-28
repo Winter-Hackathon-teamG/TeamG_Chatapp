@@ -24,7 +24,7 @@ const pagination = () => {
   //<ul class="channel-box"></ul>の中身<li>を書き換える
   const show = (page, STEP) => {
     const ul = document.querySelector(".channel-box");
-    //一度リストを空にする
+    // //一度リストを空にする
     ul.innerHTML = "";
 
     const first = (page - 1) * STEP + 1;
@@ -32,20 +32,36 @@ const pagination = () => {
     console.log(uid);
     channels.forEach((item, i) => {
       if (i < first - 1 || i > last - 1) return;
+      // チャンネルを取得し`STEP`数分を表示
       const a = document.createElement("a");
       const li = document.createElement("li");
       const url = `/detail/${item.id}`;
-      a.innerText = item.name;
+      // "チャンネル名"欄の表示
+      a.innerText =(item.name);
       a.setAttribute("href", url);
+      li.classList.add("channel-list");
       li.appendChild(a);
-      //サンプルの削除ボタンはchat画面にて表示のため未定義
+
+      //チャンネルに紐付いたタグを表示する
+      tags.filter(tag => tag.cid === item.id).forEach(tag => {
+        const tagLink = document.createElement("a");
+        // "タグ名"欄の表示
+        tagLink.innerText = "タグ名:" + (tag.name);
+        tagLink.setAttribute("href", `/tag/${tag.id}`);
+        const tagLi = document.createElement("li");
+        // liタグにcssを当てるためのclassを付与する
+        tagLi.classList.add("tag-list");
+        tagLi.appendChild(tagLink);
+        ul.appendChild(tagLi);
+      });
       ul.appendChild(li);
+      
     });
   };//const show 閉じタグ
 
   //pagination内で現在選択されているページの番号に色を付ける
   const colorPaginationNum = () => {
-    //<ul class="paination"></ul>内の<li></li>を全て取得し、配列に入れる
+    //<ul class="pagination"></ul>内の<li></li>を全て取得し、配列に入れる
     //ループさせて一度全ての<li></li>からclass="colored"を削除
     const paginationArr = [...document.querySelectorAll(".pagination li")];
     paginationArr.forEach((page) => {
