@@ -9,6 +9,9 @@
       <div class="channel-title">
         <h1>チャンネル一覧</h1>
       </div>
+      {% if tag_name %}
+      <h2>タグ名:{{ tag_name }}</h2>
+      {% endif %}
       <div class="channel-all">
         <a href="{{ url_for('index') }}">全チャンネル表示</a>
       </div>
