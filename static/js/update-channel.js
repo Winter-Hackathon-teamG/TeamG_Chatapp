@@ -14,3 +14,7 @@ updateButton.addEventListener("click", updateChannel);
 updatePageButtonClose.addEventListener("click", () => {
   modalClose("update");
 });
+
+// モーダルコンテンツ以外がクリックされた時
+addEventListener("click", outsideClose);
+function outsideClose(e) { if (e.target == updateChannelModal) { updateChannelModal.style.display = "none"; } }

@@ -20,3 +20,7 @@ deletePageButtonClose.addEventListener("click", () => {
 const confirmationButtonLink = document.getElementById("delete-confirm-link"); // id取得（aタグ）
 const url = `/delete/${channel.id}`; // urlを作成
 confirmationButtonLink.setAttribute("href", url); // urlを取得id（aタグ）のhref属性に設定
+
+// モーダルコンテンツ以外がクリックされた時
+addEventListener("click", outsideClose);
+function outsideClose(e) { if (e.target == deleteChannelModal) { deleteChannelModal.style.display = "none"; } }
