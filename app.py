@@ -196,6 +196,10 @@ def add_channel():
     """チャンネル名
 
     フォームからチャンネル名を取得→channel_nameへ代入
+
+    if チャンネル名が入力されていない場合:
+        エラーページを表示
+
     データベースから、入力されたチャンネル名と同じチャンネルを取得→channelへ代入
 
     if チャンネル名がデータベースに存在しない場合:
@@ -207,6 +211,11 @@ def add_channel():
         エラーページを表示
     """
     channel_name = request.form.get('channel-title')
+
+    if not channel_name:
+        error = 'チャンネル名が入力されていません'
+        return render_template('error/error.html', error_message=error)
+
     channel = dbConnect.getChannelByName(channel_name)
 
     if channel == None:
@@ -233,6 +242,10 @@ def update_channel():
 
     フォームからチャンネルIDを取得→cidに代入
     フォームからチャンネル名を取得→channel_nameに代入
+
+    if チャンネル名が入力されていない場合:
+        エラーページを表示
+
     フォームからチャンネル説明文を取得→channel_descriptionに代入
 
     データベースの（ユーザーID、チャンネル名、チャンネル説明文、チャンネルID）を更新
@@ -241,6 +254,11 @@ def update_channel():
 
     cid = request.form.get('cid')
     channel_name = request.form.get('channel-title')
+
+    if not channel_name:
+        error = 'チャンネル名が入力されていません'
+        return render_template('error/error.html', error_message=error)
+
     channel_description = request.form.get('channel-description')
 
     dbConnect.updateChannel(uid, channel_name, channel_description, cid)
@@ -306,6 +324,7 @@ def delete_channel(cid):
             """
         else:
             dbConnect.deleteChannel(cid)
+            dbConnect.deleteTagLinkByChannelId(cid)
             return redirect('/')
 
 # メッセージ作成機能
@@ -410,12 +429,13 @@ def tag_channel(tid):
         「まだチャンネルは登録されていません」と表示
         ※redirectでindexに遷移すると、tag_nameの表示が消えてしまうためrender_templateで記述
     """
+    tags = []
     tag = dbConnect.getTagById(tid)
     tag_name = tag['name']
     channels = dbConnect.getChannelsByTagId(tid)
 
     if channels:
-        return render_template('index.html', tag_name=tag_name, channels=channels, uid=uid)
+        return render_template('index.html',tags=tags, tag_name=tag_name, channels=channels, uid=uid)
     else:
         flash(tag_name + 'のタグにチャンネルは登録されていません')
         return redirect('/tags')
@@ -435,6 +455,8 @@ def link_tag():
 
     """
     フォームからタグ名を取得→tag_nameへ代入
+    if タグ名が入力されていない場合:
+        エラーページへ遷移
     フォームからチャンネルIDを取得→cidへ代入
 
     データベースから入力されたタグ名と同じデータを取り出す→tagへ代入
@@ -458,6 +480,11 @@ def link_tag():
     """
 
     tag_name = request.form.get('tag_name')
+
+    if not tag_name:
+        error = 'タグ名が入力されていません'
+        return render_template('error/error.html', error_message=error)
+
     cid = request.form.get('cid')
 
     tag = dbConnect.getTagByName(tag_name)
