@@ -18,12 +18,33 @@
           <button id='channel-delete' class="channel-btn ch-delete-btn">削除</button>
           {% include 'modal/delete-confirmation.html' %}
           <div class="channnel-tag">
-            <form class="tag-form" action="#" method="post">
-              <label for="" class="tag-label">登録タグ名:</label>
-              <input type="text" class="tag-input" placeholder="タグ名入力" name="tag" />
+            <form class="tag-form" action="/link_tag" method="POST">
+              <label class="tag-label" for="tag-name">登録タグ名:</label>
+              <input type="text" class="tag-input" name="tag_name" placeholder="タグ名入力">
+              <input type="hidden" name="cid" value="{{ channel.id }}">
               <input type="submit" class="ch-tag-btn" value="タグ登録">
             </form>
           </div>
+        {% endif %}
+      </div>
+      <div class="tag-accordion-title">
+        <p>登録タグ一覧</p>
+      </div>
+      <div id="header-tag-list">
+        {% if channel_tags %}
+          {% for channel_tag in channel_tags %}
+          <div class="tag-list-loop">
+            {% set cid = channel.id %}
+            <a href="{{ url_for('tag_channel', tid=channel_tag.id) }}">{{ channel_tag.name }}</a>
+            {% if uid == channel.uid %}
+              <form class="ch-tag-delete-btn" action="/delete_tag_link" method="POST">
+                <input type="hidden" name="cid" value="{{ cid }}">
+                <input type="hidden" name="tid" value="{{ channel_tag.id }}">
+                <button type="submit" class="tag-delete-btn"></button>
+              </form>
+            {% endif %}
+          </div>
+          {% endfor %}
         {% endif %}
       </div>
       {# チャット部分 #}
@@ -82,7 +103,15 @@
     type="text/javascript"
   ></script>
   <script
+    src="{{url_for('static',filename='js/delete-channel.js')}}"
+    type="text/javascript"
+  ></script>
+  <script
     src="{{url_for('static',filename='js/modal.js')}}"
+    type="text/javascript"
+  ></script>
+  <script
+    src="{{url_for('static',filename='js/detail.js')}}"
     type="text/javascript"
   ></script>
 {% endblock %}
