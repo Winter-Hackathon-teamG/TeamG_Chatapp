@@ -3,27 +3,24 @@
 }
 
 .registration-wrapper.signup {
-  background-color: aliceblue;
-}
-
-.registration-wrapper.login {
-  background-color: aliceblue;
-}
-
-.registration-main.login-main {
-  background-image: url("../img/login.jpg");
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-}
-
-.registration-main.signup-main {
   background-image: url("../img/sign_up.png");
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
+}
+
+.registration-wrapper.login {
+  background-image: url("../img/login.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.registration-main {
+  padding-top: 80px;
+  padding-left: 80px;
 }
 
 .form {
@@ -123,6 +120,7 @@
   color: rgb(37, 36, 36);
   text-decoration: underline;
   transition: 0.3s;
+  padding-left: 40px;
 }
 
 .switch-register-mode:hover {
