@@ -49,6 +49,10 @@ img {
   gap: 24px;
 }
 
+.channel-tag-name {
+  text-decoration: underline;
+}
+
 .channel-all {
   display: block;
   position: absolute;
